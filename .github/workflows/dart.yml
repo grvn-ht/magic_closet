@@ -5,6 +5,9 @@
 
 name: Dart
 
+defaults:
+  run:
+    working-directory: front_flutter
 on:
   push:
     branches: [ "main" ]

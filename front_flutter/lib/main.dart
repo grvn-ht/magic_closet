@@ -106,12 +106,14 @@ class _MyHomePageState extends State<MyHomePage> {
             //Image.asset('assets/image.jpg',
             //  height: 125.0,
             //  width: 125.0,),
+            /*
             Image.asset(
               "assets/gif.gif",
               height: 125.0,
               width: 125.0,
             ),
             const LineChartSample1(),
+            */
           ],
         ),
       ),

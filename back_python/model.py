@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os
-
+#from ../main.py import app
 database_path = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -11,9 +11,7 @@ ma = Marshmallow()
 def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///' + os.path.join(database_path, 'db.sqlite')
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    db.app = app
     db.init_app(app)
-    ma.app = app
     ma.init_app(app)
     return db
 

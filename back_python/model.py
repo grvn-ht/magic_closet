@@ -1,36 +1,48 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
+from sqlalchemy import LargeBinary,Date, DateTime
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
-#from ../main.py import app
+
 database_path = os.path.abspath(os.path.dirname(__file__))
 
-
 db = SQLAlchemy()
-ma = Marshmallow()
 
 def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///' + os.path.join(database_path, 'db.sqlite')
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
-    ma.init_app(app)
     return db
 
 def db_drop_and_create_all(app):
     with app.app_context():
         db.drop_all()
-        db.create_all() 
+        db.create_all()
 
-class TodoItem(db.Model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    is_executed = db.Column(db.Boolean)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    password = db.Column(db.String(100), nullable=False)
+    closets = db.relationship('Closet', backref='user', lazy=True)
 
-    def __init__(self, name, is_executed):
-        self.name = name
-        self.is_executed = is_executed
+    def __init__(self, email, password):
+        self.email = email
+        self.password = generate_password_hash(password)
 
-# Todo schema
-class TodoSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'name', 'is_executed')
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
+class Closet(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    infos = db.relationship('Info', backref='closet', lazy=True)
+
+class Info(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    temp = db.Column(db.Float)
+    hum = db.Column(db.Float)
+    ph = db.Column(db.Float)
+    ec = db.Column(db.Float)
+    image = db.Column(LargeBinary)
+    event_date = db.Column(Date, nullable=False)
+    created_at = db.Column(DateTime, nullable=False, server_default=db.func.now())
+    closet_id = db.Column(db.Integer, db.ForeignKey('closet.id'), nullable=False)

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_application_1/providers/todo_provider.dart';
-import 'package:flutter_application_1/widget/tasks.dart';
+import 'package:flutter_application_1/old_project/todo_provider.dart';
+import 'package:flutter_application_1/pages/welcome.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.purple,
           ),
           home: const MyHomePage(title: 'Todo app'),
+          builder: EasyLoading.init(),
         ));
   }
 }
@@ -42,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         centerTitle: true,
       ),
-      body: TasksWidget(),
+      body: WelcomePage(), //TasksWidget(),
     );
   }
 }

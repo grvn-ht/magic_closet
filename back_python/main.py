@@ -1,58 +1,179 @@
-from flask import Flask, request, jsonify
-from model import setup_db, db_drop_and_create_all, TodoSchema, TodoItem
+from flask import Flask,jsonify,request,Blueprint
+from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import create_access_token, current_user, jwt_required, JWTManager, \
+                                get_jwt_identity, set_access_cookies, get_jwt, unset_jwt_cookies, \
+                                get_csrf_token
 from flask_cors import CORS
+import os
+from model import setup_db, db_drop_and_create_all, User, Closet, Info
+from datetime import timedelta,datetime,timezone
+from functools import wraps
+from data_creation import create_sample_data
 
 app = Flask(__name__)
-CORS(app)  
-# Initialize schema
-todo_schema = TodoSchema()
-todos_schema = TodoSchema(many=True)
 
+# If true this will only allow the cookies that contain your JWTs to be sent
+# over https. In production, this should always be set to True
+app.config["JWT_COOKIE_SECURE"] = False
+app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies"]
+app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this in your code!
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+app.config["JWT_COOKIE_CSRF_PROTECT"] = True
+
+CORS(app, supports_credentials=True)
+
+jwt = JWTManager(app)
 db = setup_db(app)
 db_drop_and_create_all(app)
 
-@app.route('/todo', methods=['POST'])
-def add_todo():
-    if request.json is None:
-        return jsonify({'error': 'Invalid JSON data'}), 400
+views = Blueprint('views', __name__)
+
+# Register a callback function that takes whatever object is passed in as the
+# identity when creating JWTs and converts it to a JSON serializable format.
+@jwt.user_identity_loader
+def user_identity_lookup(user):
+    return user.id
+
+# Register a callback function that loads a user from your database whenever
+# a protected route is accessed. This should return any python object on a
+# successful lookup, or None if the lookup failed for any reason (for example
+# if the user has been deleted from the database).
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_header, jwt_data):
+    identity = jwt_data["sub"]
+    return User.query.filter_by(id=identity).one_or_none()
+
+
+""" def custom_jwt_required(exclude_routes=None):
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            print("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+            if exclude_routes and request.path in exclude_routes:
+                return f(*args, **kwargs)
+            
+            exp_timestamp = get_jwt()["exp"]
+            now = datetime.now(timezone.utc)
+            target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+            
+            if target_timestamp > exp_timestamp:
+                access_token = create_access_token(identity=get_jwt_identity())
+                response = f(*args, **kwargs)
+                set_access_cookies(response, access_token)
+                return response
+            
+            return f(*args, **kwargs)
+        
+        return jwt_required()(wrapper)
     
+    return decorator
+ """
+# Using an `after_request` callback, we refresh any token that is within 30
+# minutes of expiring. Change the timedeltas to match the needs of your application.
+#@jwt_required()
+@app.after_request
+#@custom_jwt_required(exclude_routes=["/register"])
+def refresh_expiring_jwts(response):
     try:
-        name = request.json['name']
-        is_executed = request.json['is_executed']
+        excluded_endpoints = ["/login", "/register", "/logout"]
+        if request.path in excluded_endpoints:
+            return response  # Skip the logic for excluded routes        
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(timezone.utc)
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            set_access_cookies(response, access_token)
+        return response
+    except (RuntimeError, KeyError):
+        # Case where there is not a valid JWT. Just return the original response
+        return response
 
-        new_todo_item = TodoItem(name, is_executed)
-        db.session.add(new_todo_item)
-        db.session.commit()
-
-        return todo_schema.jsonify(new_todo_item)
+@views.route("/login", methods=["POST"])
+def login():
+    try:
+        content = request.form
+        email = content.get("email")
+        password = content.get("password")
+        print(content)
+        user = User.query.filter_by(email=email).one_or_none()
+        if not user or not user.check_password(password):
+            return jsonify("Wrong username or password"), 401
+        access_token = create_access_token(identity=user)
+        csrf = get_csrf_token(access_token)
+        response = jsonify({
+            "response":"success",
+            "csrf":csrf,
+            "acces":access_token})
+        resp = app.make_response(response)
+        set_access_cookies(resp, access_token)
+        return resp
     except KeyError:
         return jsonify({'error': 'Missing or invalid data'}), 400
 
-@app.route('/todo', methods=['GET'])
-def get_todos():
-    all_todos = TodoItem.query.all()
-    result = todos_schema.dump(all_todos)
+@views.route('/register', methods=["POST"])
+def register():
+    try:
+        content = request.form
+        print(content)
+        mail = content.get("email")
+        password = content.get("password")
+        print(request.endpoint)
+        print(request.path)
 
-    return jsonify(result)
+        # Check for valid email format using regular expression
+        #if not re.match(r"[^@]+@[^@]+\.[^@]+", mail):
+        #    return jsonify(["Invalid email format"])
+        # Check for a robust password (at least 8 characters, with upper/lowercase and digits)
+        #if not (len(password) >= 8 and any(c.isupper() for c in password) and any(c.islower() for c in password) and any(c.isdigit() for c in password)):
+        #    return jsonify(["Weak password"])
+        email = User.query.filter_by(email=mail).first()
+        if email is None:
+            register = User(email=mail, password=password)
+            db.session.add(register)
+            db.session.commit()
+            access_token = create_access_token(identity=register)
+            csrf = get_csrf_token(access_token)
+            response = jsonify({
+                "response":"Register success",
+                "csrf":csrf,
+                "acces":access_token})
+            # Set the access token cookie in the response
+            resp = app.make_response(response)
+            set_access_cookies(resp, access_token)
+            print("Response Headers:", resp.headers)
+            return resp
+        else:
+            return jsonify({"response":"user alredy exist"})
+    except KeyError:
+        return jsonify({'response': 'Missing or invalid data'}), 400
 
+@views.route('/logout', methods=['POST'])
+@jwt_required()
+def logout():
+    response = jsonify({"response":"Logged out"})
+    unset_jwt_cookies(response)
+    return response
 
-@app.route('/todo/<id>', methods=['PUT', 'PATCH'])
-def execute_todo(id):
-    todo = TodoItem.query.get(id)
+app.register_blueprint(views)
 
-    todo.is_executed = not todo.is_executed
-    db.session.commit()
+@app.route("/who_am_i", methods=["GET"])
+@jwt_required()
+def protected():
+    # We can now access our sqlalchemy User object via `current_user`.
+    return jsonify(
+        id=current_user.id,
+        email=current_user.email
+    )
 
-    return todo_schema.jsonify(todo)
+@app.route("/temperature", methods=["GET"])
+#@jwt_required()
+def get_temperature_data():
+    temperature_data = Info.query.with_entities(Info.temp, Info.created_at).all()
+    temperature_timestamps = [{'temperature': temp, 'timestamp': created_at.isoformat()} for temp, created_at in temperature_data]
+    return jsonify(temperature_timestamps)
 
-
-@app.route('/todo/<id>', methods=['DELETE'])
-def delete_todo(id):
-    todo_to_delete = TodoItem.query.get(id)
-    db.session.delete(todo_to_delete)
-    db.session.commit()
-
-    return todo_schema.jsonify(todo_to_delete)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
+    create_sample_data(db, User, Closet, Info,app)
     app.run(debug=True)
+    

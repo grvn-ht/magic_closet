@@ -22,8 +22,8 @@ services:
       context: ./front_flutter  # Replace with the path to your Flask app
     ports:
       - "8080:80"  # Expose the Flutter web app port
-    #volumes:
-    #    - ./front_flutter/nginx.conf:/etc/nginx/nginx.conf  # Mount your custom nginx.conf
+    volumes:
+      - web-volume:/app/build/web  # Mount the volume from the Flutter container to /var/www/html
     depends_on:
       - flask-app
     networks:
@@ -41,11 +41,18 @@ services:
       - app-network
 
   nginx:
-    image: nginx:latest  # Use the official Nginx image
+    container_name: nginx
+    image: nginx:mainline-alpine
     ports:
+      - "443:443"
       - "80:80"  # Expose Nginx on port 80
     volumes:
-      - ./nginx-config/nginx.conf:/etc/nginx/nginx.conf  # Mount your custom nginx.conf
+      - ./nginx-config:/etc/nginx/conf.d
+      - web-volume:/var/www/html
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
+
     depends_on:
       - flutter-app
     networks:
@@ -69,3 +76,10 @@ volumes:
   postgres-data:
   certbot-etc:
   certbot-var:
+  web-volume:
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/debian/Archi-Web/dhparam/
+      o: bind

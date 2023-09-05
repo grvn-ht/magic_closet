@@ -51,9 +51,21 @@ services:
     networks:
       - app-network
 
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - ./front_flutter/web:/var/www/html
+    depends_on:
+      - nginx
+
 networks:
   app-network:
     driver: bridge
 
 volumes:
   postgres-data:
+  certbot-etc:
+  certbot-var:

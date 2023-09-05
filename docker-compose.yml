@@ -52,7 +52,6 @@ services:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
       - dhparam:/etc/ssl/certs
-
     depends_on:
       - flutter-app
     networks:
@@ -64,7 +63,7 @@ services:
     volumes:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
-      - ./front_flutter/web:/var/www/html
+      - web-volume:/var/www/html
     depends_on:
       - nginx
 
@@ -81,5 +80,5 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/debian/Archi-Web/dhparam/
+      device: /home/debian/Closet-App/magic_closet/dhparam
       o: bind

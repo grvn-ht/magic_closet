@@ -21,7 +21,7 @@ class HttpService {
   static const _appBaseUrl =
       'https://terjack.space/iot-app'; //'http://10.0.2.2:5000';
   static const _webBaseUrl =
-      'http://localhost:5000'; //'http://localhost:5000';http://flask-app:5000
+      'https://terjack.space/dash'; //'http://localhost:5000';http://flask-app:5000
 
   static String get baseUrl => kIsWeb ? _webBaseUrl : _appBaseUrl;
 

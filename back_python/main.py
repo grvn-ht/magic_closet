@@ -3,12 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import create_access_token, current_user, jwt_required, JWTManager, \
                                 get_jwt_identity, set_access_cookies, get_jwt, unset_jwt_cookies, \
                                 get_csrf_token
-from flask_cors import CORS
-import os
+from flask_cors import CORS,cross_origin
 from model import setup_db, db_drop_and_create_all, User, Closet, Info
 from datetime import timedelta,datetime,timezone
 from functools import wraps
 from data_creation import create_sample_data
+import logging
 
 app = Flask(__name__)
 
@@ -20,7 +20,7 @@ app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this in your code!
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.config["JWT_COOKIE_CSRF_PROTECT"] = True
 
-CORS(app, supports_credentials=True)
+CORS(app, origins="*", supports_credentials=True)#origins="*", supports_credentials=True) #resources={r"/*": {"origins": "http://localhost:8080"}})#
 
 jwt = JWTManager(app)
 db = setup_db(app)
@@ -43,31 +43,6 @@ def user_lookup_callback(_jwt_header, jwt_data):
     identity = jwt_data["sub"]
     return User.query.filter_by(id=identity).one_or_none()
 
-
-""" def custom_jwt_required(exclude_routes=None):
-    def decorator(f):
-        @wraps(f)
-        def wrapper(*args, **kwargs):
-            print("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-            if exclude_routes and request.path in exclude_routes:
-                return f(*args, **kwargs)
-            
-            exp_timestamp = get_jwt()["exp"]
-            now = datetime.now(timezone.utc)
-            target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
-            
-            if target_timestamp > exp_timestamp:
-                access_token = create_access_token(identity=get_jwt_identity())
-                response = f(*args, **kwargs)
-                set_access_cookies(response, access_token)
-                return response
-            
-            return f(*args, **kwargs)
-        
-        return jwt_required()(wrapper)
-    
-    return decorator
- """
 # Using an `after_request` callback, we refresh any token that is within 30
 # minutes of expiring. Change the timedeltas to match the needs of your application.
 #@jwt_required()
@@ -172,6 +147,12 @@ def get_temperature_data():
     temperature_data = Info.query.with_entities(Info.temp, Info.created_at).all()
     temperature_timestamps = [{'temperature': temp, 'timestamp': created_at.isoformat()} for temp, created_at in temperature_data]
     return jsonify(temperature_timestamps)
+
+if __name__ != '__main__':
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
+    create_sample_data(db, User, Closet, Info,app)
 
 if __name__ == "__main__":
     create_sample_data(db, User, Closet, Info,app)

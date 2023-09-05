@@ -11,8 +11,13 @@ marshmallow-sqlalchemy = "*"
 flask-cors = "*"
 flask-login = "*"
 flask-jwt-extended = "*"
+gunicorn = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.10"
+
+[scripts]
+gunicorn = "gunicorn app:app"  # Replace "myapp:app" with your app module and callable

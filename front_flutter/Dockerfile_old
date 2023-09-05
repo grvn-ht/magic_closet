@@ -1,0 +1,37 @@
+# Stage 1: Build the Flutter app
+FROM instrumentisto/flutter:3.13.2 AS builder
+
+# Set environment variables
+ENV FLUTTER_HOME=/flutter
+ENV PATH=${FLUTTER_HOME}/bin:${PATH}
+
+# Create a directory for the Flutter app and set it as the working directory
+WORKDIR /app
+
+# Copy the pubspec.yaml and pubspec.lock files to get dependencies
+COPY pubspec.yaml pubspec.yaml
+COPY pubspec.lock pubspec.lock
+
+# Run 'flutter pub get' to fetch the Flutter app dependencies
+RUN flutter pub get
+
+# Copy the rest of the app source code
+COPY . .
+
+# Build the Flutter app (replace 'web' with the target platform, e.g., 'web' for web apps)
+RUN flutter build web
+
+# Stage 2: Create a lightweight production image
+FROM nginx:latest
+
+# Copy the built Flutter app from the previous stage
+COPY --from=builder /app/build/web /usr/share/nginx/html
+#COPY --from=builder /app/build/web /etc/nginx/html
+
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Expose the port for the Flutter app (80 is the default for HTTP)
+EXPOSE 80
+
+# Start the Nginx web server
+CMD ["nginx", "-g", "daemon off;"]

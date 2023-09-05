@@ -18,8 +18,10 @@ import 'package:flutter_application_1/providers/time_series_type.dart';
 class HttpService {
   static final _client = http.Client();
 
-  static const _appBaseUrl = 'http://10.0.2.2:5000';
-  static const _webBaseUrl = 'http://localhost:5000';
+  static const _appBaseUrl =
+      'https://terjack.space/iot-app'; //'http://10.0.2.2:5000';
+  static const _webBaseUrl =
+      'http://localhost:5000'; //'http://localhost:5000';http://flask-app:5000
 
   static String get baseUrl => kIsWeb ? _webBaseUrl : _appBaseUrl;
 
@@ -36,9 +38,10 @@ class HttpService {
   Future<void> login(email, password, context) async {
     final loginUrl = Uri.parse('$baseUrl/login');
     try {
-      http.Response response = await _client.post(loginUrl,
-          body: {"email": email, "password": password},
-          headers: {'withCredentials': 'true'});
+      http.Response response = await _client.post(
+        loginUrl,
+        body: {"email": email, "password": password},
+      ); //headers: {'withCredentials': 'true'}
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
 
@@ -145,28 +148,4 @@ class HttpService {
       throw Exception('Failed to fetch temperature data');
     }
   }
-
-  /*
-  static get_data(context) async {
-
-    String cookieValue = CookieHandler.getCookie('sessionCookie');
-    Map<String, String> headers = {
-      'Cookie': cookieValue,
-      'Content-Type': 'application/json',
-    };
-
-    final datatUrl = Uri.parse('$baseUrl/current_user');
-    http.Response response = await _client.get(datatUrl); //, headers: headers);
-
-    if (response.statusCode == 200) {
-      //final List<dynamic> data = json.decode(response.body);
-      //return data;
-      final data = json.decode(response.body);
-      return data;
-    } else {
-      await EasyLoading.showError(
-          "Error Code : ${response.statusCode.toString()}");
-    }
-  }
-  */
 }

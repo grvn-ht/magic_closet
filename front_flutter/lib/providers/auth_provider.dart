@@ -108,7 +108,7 @@ class HttpService {
         var json = jsonDecode(response.body);
         if (['Logged out'].contains(json["response"])) {
           await EasyLoading.showSuccess(json["response"]);
-          Navigator.pushReplacement(
+          Navigator.push(
               context, MaterialPageRoute(builder: (context) => WelcomePage()));
         } else {
           await EasyLoading.showError(json["response"]);

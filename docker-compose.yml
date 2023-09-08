@@ -67,6 +67,18 @@ services:
     depends_on:
       - nginx
 
+  mosquitto:
+      image: eclipse-mosquitto:latest
+      ports:
+          - 1883:1883
+          - 8883:8883
+          - 9001:9001
+      volumes:
+          - ./mosquitto/config:/mosquitto/config
+          - ./mosquitto/data:/mosquitto/data
+      networks:
+          - app-network
+
 networks:
   app-network:
     driver: bridge

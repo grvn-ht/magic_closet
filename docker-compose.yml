@@ -49,7 +49,7 @@ services:
     volumes:
       - ./nginx-config:/etc/nginx/conf.d
       - web-volume:/var/www/html
-      - privacy-policy.html:/var/www/html/privacy-policy.html
+      - my-privacy-policy:/var/www/html/privacy-policy.html:ro
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
       - dhparam:/etc/ssl/certs
@@ -95,3 +95,9 @@ volumes:
       type: none
       device: /home/debian/Closet-App/magic_closet/dhparam
       o: bind
+  my-privacy-policy:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: privacy-policy.html

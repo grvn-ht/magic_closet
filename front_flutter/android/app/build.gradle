@@ -54,7 +54,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('..\\my-release-key-v2.keystore')  // Update with the actual path
+            storeFile file('../my-release-key-v2.keystore')  // Update with the actual path
             storePassword 'aaaaaa'  // Update with your keystore password
             keyAlias 'my-key-alias-v2'  // Update with your key alias
             keyPassword 'aaaaaa'           // Mot de passe de votre clé de signature

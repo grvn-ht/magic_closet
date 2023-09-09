@@ -13,6 +13,7 @@ flask-login = "*"
 flask-jwt-extended = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
+paho-mqtt = "*"
 
 [dev-packages]
 

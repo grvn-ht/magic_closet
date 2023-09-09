@@ -18,8 +18,7 @@ import 'package:flutter_application_1/providers/time_series_type.dart';
 class HttpService {
   static final _client = http.Client();
 
-  static const _appBaseUrl =
-      'https://terjack.space/iot-app'; //'http://10.0.2.2:5000';
+  static const _appBaseUrl = 'https://terjack.space'; //'http://10.0.2.2:5000';
   static const _webBaseUrl =
       'https://terjack.space'; //'http://localhost:5000';http://flask-app:5000
 

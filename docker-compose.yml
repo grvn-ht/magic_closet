@@ -35,6 +35,9 @@ services:
       POSTGRES_DB: fullcloset
       POSTGRES_USER: gur
       POSTGRES_PASSWORD: lemotdepassesecret!!-678
+    ports:
+      - "5432:5432"  # Expose the Gunicorn port
+
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
@@ -69,6 +72,7 @@ services:
       - nginx
 
   mosquitto:
+      container_name: mosquitto
       image: eclipse-mosquitto:latest
       ports:
           - 1883:1883

@@ -37,10 +37,13 @@ platform :android do
   end
 
   lane :playstore do
-    gradle(
-      task: 'assemble',
-      build_type: 'Release'
-    )
-    upload_to_play_store 
-  end
+    gradle(task: "clean assembleRelease")
+
+    # gradle(
+    #   task: 'assemble',
+    #   build_type: 'Release'
+    # )
+    upload_to_play_store(
+      version_code: 2  # Use an environment variable for version_code
+    )  end
 end

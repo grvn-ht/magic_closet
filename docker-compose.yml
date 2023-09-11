@@ -84,6 +84,17 @@ services:
       networks:
           - app-network
 
+  parser_mqtt:
+    container_name: parser_mqtt
+    build:
+      context: ./  # Replace with the path to your Flask app
+      dockerfile: ./mos/Dockerfile
+    depends_on:
+      - db
+      - mosquitto
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge

@@ -14,6 +14,7 @@ flask-jwt-extended = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
 paho-mqtt = "*"
+psycopg2 = "*"
 
 [dev-packages]
 

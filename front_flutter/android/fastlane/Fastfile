@@ -37,13 +37,17 @@ platform :android do
   end
 
   lane :playstore do
-    gradle(task: "clean assembleRelease")
+    # gradle(task: "clean assembleRelease")
 
-    # gradle(
-    #   task: 'assemble',
-    #   build_type: 'Release'
-    # )
+    gradle(
+      task: "bundle",
+      build_type: 'Release',
+      properties: {
+        flutterBuildMode: "release", # Use 'profile' for profile mode
+      }
+    )
     upload_to_play_store(
-      version_code: 2  # Use an environment variable for version_code
+      version_code: 1,  # Use an environment variable for version_code
+      aab: 'C:\Users\grvnh\Documents\magic_closet\front_flutter\build\app\outputs\bundle\release\app-release.aab'
     )  end
 end

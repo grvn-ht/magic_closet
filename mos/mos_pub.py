@@ -18,7 +18,7 @@ client.connect(broker_hostname, port)
 client.loop_start()
 
 topics = ["temp", "hum","ph","ec"]
-closets = [1,3]
+closets = [1]
 i=10
 try:
     while i<=26:

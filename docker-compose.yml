@@ -53,6 +53,7 @@ services:
       - ./nginx-config:/etc/nginx/conf.d
       - web-volume:/var/www/html
       - ./privacy-policy.html:/var/www/html/privacy-policy.html:ro
+      - ./suppress_account.html:/var/www/html/suppress_account.html:ro
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
       - dhparam:/etc/ssl/certs

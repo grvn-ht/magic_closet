@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import os
+import time
 
 def create_sample_data(db, User, Closet, Info,app):
     with app.app_context():  # Activate the application context
@@ -29,5 +30,5 @@ def create_sample_data(db, User, Closet, Info,app):
                         event_date=event_date.date(), created_at=created_at, closet_id=closet.id)
 
             db.session.add(info)
-
-        db.session.commit()
+            db.session.commit()
+            time.sleep(0.5)

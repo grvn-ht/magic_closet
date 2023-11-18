@@ -26,6 +26,7 @@ class _DashboardState extends State<Dashboard> {
   List<TimeSeriesTypeH> moistureData = [];
   List<TimeSeriesTypeP> phData = [];
   List<TimeSeriesTypeE> ecData = [];
+  Uint8List imageData = Uint8List(10);
 
   @override
   void initState() {
@@ -38,8 +39,10 @@ class _DashboardState extends State<Dashboard> {
     fetchTemperatureData();
     fetchMoistureData();
     fetchPhData();
+    fetchEcData();
+    fetchImageData();
     _timer = Timer.periodic(const Duration(hours: 1), (timer) {
-      fetchEcData();
+      fetchImageData();
     });
   }
 
@@ -68,7 +71,7 @@ class _DashboardState extends State<Dashboard> {
         moistureData = data;
       });
     } catch (e) {
-      print('Error fetching temperature data: $e');
+      print('Error fetching moisture data: $e');
     }
   }
 
@@ -79,7 +82,7 @@ class _DashboardState extends State<Dashboard> {
         phData = data;
       });
     } catch (e) {
-      print('Error fetching temperature data: $e');
+      print('Error fetching ph data: $e');
     }
   }
 
@@ -90,7 +93,18 @@ class _DashboardState extends State<Dashboard> {
         ecData = data;
       });
     } catch (e) {
-      print('Error fetching temperature data: $e');
+      print('Error fetching ec data: $e');
+    }
+  }
+
+  Future<void> fetchImageData() async {
+    try {
+      final data = await httpService.getImageData();
+      setState(() {
+        imageData = data;
+      });
+    } catch (e) {
+      print('Error fetching image data: $e');
     }
   }
 
@@ -305,7 +319,13 @@ class _DashboardState extends State<Dashboard> {
                       child: Container(
                         height: 500.0,
                         color: Colors.yellow,
-                        child: const Text("photo"),
+                        //child: const Text("photo"),
+                        child: imageData.isNotEmpty
+                            ? Image.memory(
+                                imageData,
+                                fit: BoxFit.cover, // Adjust the fit as needed
+                              )
+                            : const CircularProgressIndicator(), // Show a loading indicator while fetching the image
                       ),
                     ),
                   ),

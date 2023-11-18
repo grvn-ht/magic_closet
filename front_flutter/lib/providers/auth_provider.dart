@@ -229,12 +229,13 @@ class HttpService {
     }
   }
 
-  Future<ImageCustom> fetchImageData() async {
+  Future<Uint8List> getImageData() async {
     final imUrl = Uri.parse('$baseUrl/image');
     try {
       final response = await _client.get(imUrl);
       if (response.statusCode == 200) {
-        final byteData = ImageCustom(response.bodyBytes);
+        final byteData = response.bodyBytes;
+        //ImageCustom(response.bodyBytes);
         return byteData;
       } else {
         throw Exception('Failed to fetch image data');

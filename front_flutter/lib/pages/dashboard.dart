@@ -350,7 +350,24 @@ class _DashboardState extends State<Dashboard> {
                       child: Container(
                         height: 500.0,
                         color: Colors.yellow,
-                        child: const Text("timelaps"),
+                        //child: const Text("timelaps"),
+                        child: Image.network(
+                          'https://www.terjack.space/gif', // Provide the URL of the image
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ),
                   ),

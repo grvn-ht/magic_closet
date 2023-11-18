@@ -27,8 +27,3 @@ class TimeSeriesTypeP {
 
   TimeSeriesTypeP(this.time, this.ph);
 }
-
-class ImageCustom {
-  final Uint8List image;
-  ImageCustom(this.image);
-}

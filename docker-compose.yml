@@ -7,6 +7,8 @@ services:
       dockerfile: ./back_python/Dockerfile
     ports:
       - "5000:5000"  # Expose the Gunicorn port
+    volumes:
+      - /home/debian/Closet-App/magic_closet/back_python/sample_image.jpg:/tmp/sample_image.jpg  # Mount the volume from the Flutter container to /var/www/html
     environment:
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432

@@ -9,6 +9,7 @@ from datetime import timedelta,datetime,timezone
 from functools import wraps
 from data_creation import create_sample_data
 import logging
+from flask import send_from_directory
 
 app = Flask(__name__)
 
@@ -176,9 +177,10 @@ def get_ec_data():
 @app.route("/image", methods=["GET"])
 #@jwt_required()
 def get_image_data():
-    image_data = Info.query.with_entities(Info.image, Info.created_at).order_by(Info.created_at.desc()).limit(1).all()
-    image_timestamps = [{'image': image, 'timestamp': created_at.isoformat()} for image, created_at in image_data]
-    return jsonify(image_timestamps[0])
+    #image_data = Info.query.with_entities(Info.image, Info.created_at).order_by(Info.created_at.desc()).limit(1).all()
+    #image_timestamps = [{'image': image, 'timestamp': created_at.isoformat()} for image, created_at in image_data]
+    #return jsonify(image_timestamps[0])
+    return send_from_directory(directory='/home/debian/Closet-App/magic_closet/back_python', path='sample_image.jpg')
 
 if __name__ != '__main__':
     gunicorn_logger = logging.getLogger('gunicorn.error')

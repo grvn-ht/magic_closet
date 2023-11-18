@@ -20,13 +20,13 @@ def create_sample_data(db, User, Closet, Info,app):
             hum = i * 2
             ph = i * 0.3
             ec = 0.3 + (i * 0.03)
-            with open('sample_image.jpg', 'rb') as image_file:
-                image_data = image_file.read()
+            #with open('sample_image.jpg', 'rb') as image_file:
+            #    image_data = image_file.read()
 
             event_date = start_date + (i * time_interval)
             created_at = event_date
 
-            info = Info(temp=temp, hum=hum, ph=ph, ec=ec, image=image_data,
+            info = Info(temp=temp, hum=hum, ph=ph, ec=ec, image='/home/debian/Closet-App/magic_closet/back_python/sample_image.jpg',
                         event_date=event_date.date(), created_at=created_at, closet_id=closet.id)
 
             db.session.add(info)

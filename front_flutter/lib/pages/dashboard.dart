@@ -26,7 +26,7 @@ class _DashboardState extends State<Dashboard> {
   List<TimeSeriesTypeH> moistureData = [];
   List<TimeSeriesTypeP> phData = [];
   List<TimeSeriesTypeE> ecData = [];
-  Uint8List imageData = Uint8List(10);
+  String imageData = '';
 
   @override
   void initState() {
@@ -40,10 +40,10 @@ class _DashboardState extends State<Dashboard> {
     fetchMoistureData();
     fetchPhData();
     fetchEcData();
-    fetchImageData();
-    _timer = Timer.periodic(const Duration(hours: 1), (timer) {
-      fetchImageData();
-    });
+    //fetchImageData();
+    //_timer = Timer.periodic(const Duration(hours: 1), (timer) {
+    //  fetchImageData();
+    //});
   }
 
   @override
@@ -97,6 +97,7 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
+  /*
   Future<void> fetchImageData() async {
     try {
       final data = await httpService.getImageData();
@@ -107,7 +108,7 @@ class _DashboardState extends State<Dashboard> {
       print('Error fetching image data: $e');
     }
   }
-
+  */
   @override
   Widget build(BuildContext context) {
     double? latestTemperatureValue;
@@ -320,12 +321,23 @@ class _DashboardState extends State<Dashboard> {
                         height: 500.0,
                         color: Colors.yellow,
                         //child: const Text("photo"),
-                        child: imageData.isNotEmpty
-                            ? Image.memory(
-                                imageData,
-                                fit: BoxFit.cover, // Adjust the fit as needed
-                              )
-                            : const CircularProgressIndicator(), // Show a loading indicator while fetching the image
+                        child: Image.network(
+                          'https://www.terjack.space/image', // Provide the URL of the image
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ),
                   ),

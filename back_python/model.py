@@ -42,7 +42,7 @@ class Info(db.Model):
     hum = db.Column(db.Float)
     ph = db.Column(db.Float)
     ec = db.Column(db.Float)
-    image = db.Column(LargeBinary)
+    image = db.Column(db.String)
     event_date = db.Column(Date, nullable=False)
     created_at = db.Column(DateTime, nullable=False, server_default=db.func.now())
     closet_id = db.Column(db.Integer, db.ForeignKey('closet.id'), nullable=False)

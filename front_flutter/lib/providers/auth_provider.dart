@@ -228,8 +228,8 @@ class HttpService {
       throw Exception('Failed to fetch ec data');
     }
   }
-
-  Future<Uint8List> getImageData() async {
+/*
+  Future<String> getImageData() async {
     final imUrl = Uri.parse('$baseUrl/image');
     try {
       final response = await _client.get(imUrl);
@@ -245,4 +245,5 @@ class HttpService {
       throw Exception('Failed to fetch image data');
     }
   }
+*/
 }

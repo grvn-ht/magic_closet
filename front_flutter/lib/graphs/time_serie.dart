@@ -14,6 +14,12 @@ class SimpleTimeSeriesChart extends StatelessWidget {
     return charts.TimeSeriesChart(
       seriesList,
       animate: animate,
+      behaviors: [
+        charts.SeriesLegend(
+          position: charts.BehaviorPosition.bottom,
+          showMeasures: true,
+        ),
+      ],
       // Optionally pass in a [DateTimeFactory] used by the chart. The factory
       // should create the same type of [DateTime] as the data provided. If none
       // specified, the default creates local date time.

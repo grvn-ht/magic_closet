@@ -121,7 +121,7 @@ class HttpService {
     }
   }
 
-  Future<List<TimeSeriesType>> getTemperatureData() async {
+  Future<List<TimeSeriesTypeT>> getTemperatureData() async {
     final temperatureUrl = Uri.parse('$baseUrl/temperature');
 
     try {
@@ -131,8 +131,8 @@ class HttpService {
         List<dynamic> jsonData = jsonDecode(response.body);
 
         // Map each item in jsonData to a Map with keys 'temperature' and 'timestamp'
-        List<TimeSeriesType> temperatureData = jsonData.map((item) {
-          return TimeSeriesType(
+        List<TimeSeriesTypeT> temperatureData = jsonData.map((item) {
+          return TimeSeriesTypeT(
             DateTime.parse(item['timestamp']),
             item['temperature'].toDouble(),
           );
@@ -145,6 +145,103 @@ class HttpService {
     } catch (e) {
       print('Error making HTTP request: $e');
       throw Exception('Failed to fetch temperature data');
+    }
+  }
+
+  Future<List<TimeSeriesTypeH>> getMoistureData() async {
+    final moistureUrl = Uri.parse('$baseUrl/moisture');
+
+    try {
+      http.Response response = await _client.get(moistureUrl);
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = jsonDecode(response.body);
+
+        // Map each item in jsonData to a Map with keys 'temperature' and 'timestamp'
+        List<TimeSeriesTypeH> moistureData = jsonData.map((item) {
+          return TimeSeriesTypeH(
+            DateTime.parse(item['timestamp']),
+            item['moisture'].toDouble(),
+          );
+        }).toList();
+
+        return moistureData;
+      } else {
+        throw Exception('Failed to fetch moisture data');
+      }
+    } catch (e) {
+      print('Error making HTTP request: $e');
+      throw Exception('Failed to fetch moisture data');
+    }
+  }
+
+  Future<List<TimeSeriesTypeP>> getPhData() async {
+    final phUrl = Uri.parse('$baseUrl/ph');
+
+    try {
+      http.Response response = await _client.get(phUrl);
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = jsonDecode(response.body);
+
+        // Map each item in jsonData to a Map with keys 'temperature' and 'timestamp'
+        List<TimeSeriesTypeP> phData = jsonData.map((item) {
+          return TimeSeriesTypeP(
+            DateTime.parse(item['timestamp']),
+            item['ph'].toDouble(),
+          );
+        }).toList();
+
+        return phData;
+      } else {
+        throw Exception('Failed to fetch ph data');
+      }
+    } catch (e) {
+      print('Error making HTTP request: $e');
+      throw Exception('Failed to fetch ph data');
+    }
+  }
+
+  Future<List<TimeSeriesTypeE>> getEcData() async {
+    final ecUrl = Uri.parse('$baseUrl/ec');
+
+    try {
+      http.Response response = await _client.get(ecUrl);
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = jsonDecode(response.body);
+
+        // Map each item in jsonData to a Map with keys 'temperature' and 'timestamp'
+        List<TimeSeriesTypeE> ecData = jsonData.map((item) {
+          return TimeSeriesTypeE(
+            DateTime.parse(item['timestamp']),
+            item['ec'].toDouble(),
+          );
+        }).toList();
+
+        return ecData;
+      } else {
+        throw Exception('Failed to fetch ec data');
+      }
+    } catch (e) {
+      print('Error making HTTP request: $e');
+      throw Exception('Failed to fetch ec data');
+    }
+  }
+
+  Future<ImageCustom> fetchImageData() async {
+    final imUrl = Uri.parse('$baseUrl/image');
+    try {
+      final response = await _client.get(imUrl);
+      if (response.statusCode == 200) {
+        final byteData = ImageCustom(response.bodyBytes);
+        return byteData;
+      } else {
+        throw Exception('Failed to fetch image data');
+      }
+    } catch (e) {
+      print('Error fetching image: $e');
+      throw Exception('Failed to fetch image data');
     }
   }
 }

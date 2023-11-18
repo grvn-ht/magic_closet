@@ -10,6 +10,7 @@ import 'package:flutter_application_1/graphs/line_chart.dart';
 import 'package:flutter_application_1/graphs/time_serie.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_application_1/providers/time_series_type.dart';
+import 'dart:async';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -18,9 +19,13 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  late Timer _timer;
   late CookieService cookieService;
   final HttpService httpService = HttpService();
-  List<TimeSeriesType> temperatureData = [];
+  List<TimeSeriesTypeT> temperatureData = [];
+  List<TimeSeriesTypeH> moistureData = [];
+  List<TimeSeriesTypeP> phData = [];
+  List<TimeSeriesTypeE> ecData = [];
 
   @override
   void initState() {
@@ -31,11 +36,23 @@ class _DashboardState extends State<Dashboard> {
       cookieService = AppCookieService();
     }
     fetchTemperatureData();
+    fetchMoistureData();
+    fetchPhData();
+    _timer = Timer.periodic(const Duration(hours: 1), (timer) {
+      fetchEcData();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer
+        .cancel(); // Cancel the timer to prevent memory leaks when the widget is disposed
+    super.dispose();
   }
 
   Future<void> fetchTemperatureData() async {
     try {
-      List<TimeSeriesType> data = await httpService.getTemperatureData();
+      List<TimeSeriesTypeT> data = await httpService.getTemperatureData();
       setState(() {
         temperatureData = data;
       });
@@ -44,8 +61,67 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
+  Future<void> fetchMoistureData() async {
+    try {
+      List<TimeSeriesTypeH> data = await httpService.getMoistureData();
+      setState(() {
+        moistureData = data;
+      });
+    } catch (e) {
+      print('Error fetching temperature data: $e');
+    }
+  }
+
+  Future<void> fetchPhData() async {
+    try {
+      List<TimeSeriesTypeP> data = await httpService.getPhData();
+      setState(() {
+        phData = data;
+      });
+    } catch (e) {
+      print('Error fetching temperature data: $e');
+    }
+  }
+
+  Future<void> fetchEcData() async {
+    try {
+      List<TimeSeriesTypeE> data = await httpService.getEcData();
+      setState(() {
+        ecData = data;
+      });
+    } catch (e) {
+      print('Error fetching temperature data: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    double? latestTemperatureValue;
+    double? latestMoistureValue;
+    double? latestPhValue;
+    double? latestEcValue;
+
+    if (temperatureData != null && temperatureData.isNotEmpty) {
+      // Sort the data to get the latest EC value
+      temperatureData.sort((a, b) => b.time.compareTo(a.time));
+      latestTemperatureValue = temperatureData.first.temperature;
+    }
+    if (moistureData != null && moistureData.isNotEmpty) {
+      // Sort the data to get the latest EC value
+      moistureData.sort((a, b) => b.time.compareTo(a.time));
+      latestMoistureValue = moistureData.first.moisture;
+    }
+    if (phData != null && phData.isNotEmpty) {
+      // Sort the data to get the latest EC value
+      phData.sort((a, b) => b.time.compareTo(a.time));
+      latestPhValue = phData.first.ph;
+    }
+    if (ecData != null && ecData.isNotEmpty) {
+      // Sort the data to get the latest EC value
+      ecData.sort((a, b) => b.time.compareTo(a.time));
+      latestEcValue = ecData.first.ec;
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("Dashboard"),
@@ -71,7 +147,17 @@ class _DashboardState extends State<Dashboard> {
                       child: Container(
                         height: 100.0,
                         color: Colors.red,
-                        child: const Text("humidity"),
+                        //child: const Text("humidity"),
+                        child: Text(
+                          latestTemperatureValue != null
+                              ? 'Temp:\n ${latestTemperatureValue.toString()}'
+                              : 'Temp: \n No data', //latestTemperatureValue.toString() : 'No data', // Show 'No data' if there's no EC value
+                          style: const TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -81,7 +167,16 @@ class _DashboardState extends State<Dashboard> {
                       child: Container(
                         height: 100.0,
                         color: Colors.red,
-                        child: const Text("humidity"),
+                        child: Text(
+                          latestMoistureValue != null
+                              ? 'Hum:\n ${latestMoistureValue.toString()}'
+                              : 'Hum: \n No data', //latestMoistureValue.toString() : 'No data', // Show 'No data' if there's no EC value
+                          style: const TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -91,7 +186,16 @@ class _DashboardState extends State<Dashboard> {
                       child: Container(
                         height: 100.0,
                         color: Colors.red,
-                        child: const Text("humidity"),
+                        child: Text(
+                          latestEcValue != null
+                              ? 'Ec:\n ${latestEcValue.toString()}'
+                              : 'Ec: \n No data', //latestPhValue.toString() : 'No data', // Show 'No data' if there's no EC value
+                          style: const TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -101,7 +205,16 @@ class _DashboardState extends State<Dashboard> {
                       child: Container(
                         height: 100.0,
                         color: Colors.red,
-                        child: const Text("humidity"),
+                        child: Text(
+                          latestPhValue != null
+                              ? 'Ph:\n ${latestPhValue.toString()}'
+                              : 'Ph: \n No data', //latestEcValue.toString() : 'No data', // Show 'No data' if there's no EC value
+                          style: const TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -125,7 +238,8 @@ class _DashboardState extends State<Dashboard> {
                           padding:
                               const EdgeInsets.all(16.0), // Add padding here
                           child: SimpleTimeSeriesChart(
-                            _createSampleData(temperatureData),
+                            _createSampleDataT(temperatureData),
+                            animate: false,
                           ),
                         ),
                       ),
@@ -140,7 +254,7 @@ class _DashboardState extends State<Dashboard> {
                           padding:
                               const EdgeInsets.all(16.0), // Add padding here
                           child: SimpleTimeSeriesChart(
-                            _createSampleData(temperatureData),
+                            _createSampleDataH(moistureData),
                           ),
                         ),
                       ),
@@ -155,7 +269,7 @@ class _DashboardState extends State<Dashboard> {
                           padding:
                               const EdgeInsets.all(16.0), // Add padding here
                           child: SimpleTimeSeriesChart(
-                            _createSampleData(temperatureData),
+                            _createSampleDataP(phData),
                           ),
                         ),
                       ),
@@ -170,7 +284,7 @@ class _DashboardState extends State<Dashboard> {
                           padding:
                               const EdgeInsets.all(16.0), // Add padding here
                           child: SimpleTimeSeriesChart(
-                            _createSampleData(temperatureData),
+                            _createSampleDataE(ecData),
                           ),
                         ),
                       ),
@@ -220,12 +334,49 @@ class _DashboardState extends State<Dashboard> {
         );
   }
 
-  List<charts.Series<TimeSeriesType, DateTime>> _createSampleData(sensorData) {
+  List<charts.Series<TimeSeriesTypeT, DateTime>> _createSampleDataT(
+      sensorData) {
     return [
-      charts.Series<TimeSeriesType, DateTime>(
-        id: 'sensor_data',
-        domainFn: (TimeSeriesType type, _) => type.time,
-        measureFn: (TimeSeriesType type, _) => type.sensor_data,
+      charts.Series<TimeSeriesTypeT, DateTime>(
+        id: 'temperature',
+        domainFn: (TimeSeriesTypeT type, _) => type.time,
+        measureFn: (TimeSeriesTypeT type, _) => type.temperature,
+        data: sensorData,
+      )
+    ];
+  }
+
+  List<charts.Series<TimeSeriesTypeH, DateTime>> _createSampleDataH(
+      sensorData) {
+    return [
+      charts.Series<TimeSeriesTypeH, DateTime>(
+        id: 'moisture',
+        domainFn: (TimeSeriesTypeH type, _) => type.time,
+        measureFn: (TimeSeriesTypeH type, _) => type.moisture,
+        data: sensorData,
+      )
+    ];
+  }
+
+  List<charts.Series<TimeSeriesTypeE, DateTime>> _createSampleDataE(
+      sensorData) {
+    return [
+      charts.Series<TimeSeriesTypeE, DateTime>(
+        id: 'ec',
+        domainFn: (TimeSeriesTypeE type, _) => type.time,
+        measureFn: (TimeSeriesTypeE type, _) => type.ec,
+        data: sensorData,
+      )
+    ];
+  }
+
+  List<charts.Series<TimeSeriesTypeP, DateTime>> _createSampleDataP(
+      sensorData) {
+    return [
+      charts.Series<TimeSeriesTypeP, DateTime>(
+        id: 'ph',
+        domainFn: (TimeSeriesTypeP type, _) => type.time,
+        measureFn: (TimeSeriesTypeP type, _) => type.ph,
         data: sensorData,
       )
     ];

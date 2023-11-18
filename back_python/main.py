@@ -144,9 +144,40 @@ def protected():
 @app.route("/temperature", methods=["GET"])
 #@jwt_required()
 def get_temperature_data():
-    temperature_data = Info.query.with_entities(Info.temp, Info.created_at).all()
+    temperature_data = Info.query.with_entities(Info.temp, Info.created_at).order_by(Info.created_at.desc()).limit(500).all()
+    #Info.query.with_entities(Info.temp, Info.created_at).all()
     temperature_timestamps = [{'temperature': temp, 'timestamp': created_at.isoformat()} for temp, created_at in temperature_data]
     return jsonify(temperature_timestamps)
+
+@app.route("/moisture", methods=["GET"])
+#@jwt_required()
+def get_moisture_data():
+    moisture_data = Info.query.with_entities(Info.hum, Info.created_at).order_by(Info.created_at.desc()).limit(500).all()
+    #Info.query.with_entities(Info.temp, Info.created_at).all()
+    moisture_timestamps = [{'moisture': hum, 'timestamp': created_at.isoformat()} for hum, created_at in moisture_data]
+    return jsonify(moisture_timestamps)
+
+@app.route("/ph", methods=["GET"])
+#@jwt_required()
+def get_ph_data():
+    ph_data = Info.query.with_entities(Info.ph, Info.created_at).order_by(Info.created_at.desc()).limit(500).all()
+    #Info.query.with_entities(Info.temp, Info.created_at).all()
+    ph_timestamps = [{'ph': ph, 'timestamp': created_at.isoformat()} for ph, created_at in ph_data]
+    return jsonify(ph_timestamps)
+
+@app.route("/ec", methods=["GET"])
+#@jwt_required()
+def get_ec_data():
+    ec_data = Info.query.with_entities(Info.ec, Info.created_at).order_by(Info.created_at.desc()).limit(500).all()
+    #Info.query.with_entities(Info.temp, Info.created_at).all()
+    ec_timestamps = [{'ec': ec, 'timestamp': created_at.isoformat()} for ec, created_at in ec_data]
+    return jsonify(ec_timestamps)
+
+@app.route("/image", methods=["GET"])
+#@jwt_required()
+def get_image_data():
+    image_data = Info.query.with_entities(Info.image, Info.created_at).order_by(Info.created_at.desc()).limit(1).all()
+    return image_data
 
 if __name__ != '__main__':
     gunicorn_logger = logging.getLogger('gunicorn.error')

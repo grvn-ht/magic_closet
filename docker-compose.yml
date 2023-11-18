@@ -40,6 +40,7 @@ services:
 
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      - /home/debian/Closet-App/magic_closet/postgres_config/postgresql.conf:/etc/postgresql/postgresql.conf  # Mount custom config
     networks:
       - app-network
 

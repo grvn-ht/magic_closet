@@ -177,7 +177,8 @@ def get_ec_data():
 #@jwt_required()
 def get_image_data():
     image_data = Info.query.with_entities(Info.image, Info.created_at).order_by(Info.created_at.desc()).limit(1).all()
-    return image_data
+    image_timestamps = [{'image': image, 'timestamp': created_at.isoformat()} for image, created_at in image_data]
+    return jsonify(image_timestamps[0])
 
 if __name__ != '__main__':
     gunicorn_logger = logging.getLogger('gunicorn.error')

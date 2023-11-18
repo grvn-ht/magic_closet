@@ -234,9 +234,9 @@ class HttpService {
     try {
       final response = await _client.get(imUrl);
       if (response.statusCode == 200) {
-        final byteData = response.bodyBytes;
+        final image = jsonDecode(response.body);
         //ImageCustom(response.bodyBytes);
-        return byteData;
+        return image['image'];
       } else {
         throw Exception('Failed to fetch image data');
       }

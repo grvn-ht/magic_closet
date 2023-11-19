@@ -1,10 +1,10 @@
 FROM stilliard/pure-ftpd:latest
 
 # Create a directory within the FTP user's home directory
-RUN mkdir -p /home/ftpusers
+RUN mkdir -p /home/gur
 
 # Set permissions for the directory (if needed)
-RUN chown ftpuser:ftpuser /home/ftpusers
+RUN chown gur:gur /home/gur
 
 # Optionally, you can expose the FTP port (default is 21)
 # EXPOSE 21

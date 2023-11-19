@@ -110,7 +110,7 @@ services:
       - "21:21"
     volumes:
       - ftpdata:/home/gur
-      - ftppass:/etc/pure-ftpd/passwd"
+      - ftppass:/etc/pure-ftpd/passwd
     environment:
       - FTP_USER_NAME=gur
       - FTP_USER_PASS=lemotdepassesecret!!-678
@@ -129,6 +129,7 @@ volumes:
   certbot-var:
   web-volume:
   ftpdata:
+    driver: local
   ftppass:
   dhparam:
     driver: local

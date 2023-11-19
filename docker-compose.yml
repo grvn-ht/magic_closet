@@ -102,16 +102,18 @@ services:
     networks:
       - app-network
 
-  ftp-server:
-    image: stilliard/pure-ftpd:latest
+  ftp:
+    container_name: ftp
+    build:
+      context: ./ftp  # Replace with the path to your Flask app
     ports:
       - "21:21"
     volumes:
-      - ftpdata:/home/ftpuser
+      - ftpdata:/home/gur
     environment:
       - FTP_USER=gur
       - FTP_PASS=lemotdepassesecret!!-678
-      - FTP_HOME=/home/ftpuser
+      - FTP_HOME=/home/gur
       - FTP_UID=1000
       - FTP_GID=1000
     restart: always

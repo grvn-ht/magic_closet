@@ -111,9 +111,9 @@ services:
     volumes:
       - ftpdata:/home/gur
     environment:
-      - FTP_USER=gur
-      - FTP_PASS=lemotdepassesecret!!-678
-      - FTP_HOME=/home/gur
+      - FTP_USER_NAME=gur
+      - FTP_USER_PASS=lemotdepassesecret!!-678
+      - FTP_USER_HOME=/home/gur
       - FTP_UID=1000
       - FTP_GID=1000
     restart: always

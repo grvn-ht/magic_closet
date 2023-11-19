@@ -186,10 +186,10 @@ def get_image_data():
 @app.route("/gif", methods=["GET"])
 #@jwt_required()
 def get_gif_data():
-    frames = [Image.open('/tmp/sample_image.jpg') for i in range(10)]
-    frame_one = frames[0]
-    frame_one.save("/tmp/gif.gif", format="GIF", append_images=frames,
-               save_all=True, duration=100, loop=0)
+    #frames = [Image.open('/tmp/sample_image.jpg') for i in range(10)]
+    #frame_one = frames[0]
+    #frame_one.save("/tmp/gif.gif", format="GIF", append_images=frames,
+    #           save_all=True, duration=100, loop=0)
     #image_data = Info.query.with_entities(Info.image, Info.created_at).order_by(Info.created_at.desc()).limit(1).all()
     #image_timestamps = [{'image': image, 'timestamp': created_at.isoformat()} for image, created_at in image_data]
     #return jsonify(image_timestamps[0])

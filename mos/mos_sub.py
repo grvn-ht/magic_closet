@@ -11,32 +11,38 @@ infos_to_insert={}
 # info_to_insert['image']=image_data
 
 # MQTT broker settings
-broker_address =  "mosquitto"
+broker_address =  "151.80.152.245" #"mosquitto"
 port = 1883
 topics = ["temp", "hum","ph","ec"]
 
 def decode_message(message):
-    print('message: '+ message)
-    values = message.split("|")
-    id_closet = values[0]
-    final_value = float(values[1])
-    return (id_closet,final_value)
-
+    try:
+        print('message: '+ message)
+        values = message.split("|")
+        id_closet = values[0]
+        final_value = float(values[1])
+        return (id_closet,final_value)
+    except:
+        return (None,None)
 # Callback when a message is received
 def on_message(client, userdata, message):
     global infos_to_insert
     
     id_closet, value = decode_message(message.payload.decode("utf-8"))
-    if id_closet not in infos_to_insert:
-        infos_to_insert[id_closet] = {}  # Create an inner dictionary if it doesn't exist
-    infos_to_insert[id_closet][message.topic]=value
-    print(infos_to_insert[id_closet])
+    if id_closet is None:
+        pass
+    else:
+        if id_closet not in infos_to_insert:
+            infos_to_insert[id_closet] = {'ec':0,'ph':0,'hum':0,'temp':0}  # Create an inner dictionary if it doesn't exist
+        infos_to_insert[id_closet][message.topic]=value
+        print(infos_to_insert[id_closet])
 
 # Create an MQTT client
 client = mqtt.Client()
 
 # Set the message callback
 client.on_message = on_message
+client.username_pw_set("gur", "My super Password.") # uncomment if you use password auth
 
 # Connect to the MQTT broker
 client.connect(broker_address, port)
@@ -78,6 +84,11 @@ def publish_infos_to_db():
                 to_insert['closet_id']=id_closet
                 insert_infos_to_db(to_insert)
             #reinitialisation du dict pour les 5 prochaines minutes
+
+            #save image on volume which we will share with flask app
+            #write in /data/id_closet/
+            #format image with: id_closet_timestamp.jpeg
+
             infos_to_insert={} 
             print('other bagg')
             time.sleep(60)  # Sleep for 5 minutes (300 seconds)

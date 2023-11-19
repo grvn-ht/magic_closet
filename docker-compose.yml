@@ -108,6 +108,7 @@ services:
       context: ./ftp  # Replace with the path to your Flask app
     ports:
       - "21:21"
+      - "30000-30009:30000-30009"
     volumes:
       - ftpdata:/home/gur
       - ftppass:/etc/pure-ftpd/passwd

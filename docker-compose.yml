@@ -113,11 +113,10 @@ services:
       - ftpdata:/home/gur
       - ftppass:/etc/pure-ftpd/passwd
     environment:
-      - FTP_USER_NAME=gur
-      - FTP_USER_PASS=lemotdepassesecret!!-678
-      - FTP_USER_HOME=/home/gur
-      - FTP_UID=1000
-      - FTP_GID=1000
+      PUBLICHOST: localhost
+      FTP_USER_NAME: gur
+      FTP_USER_PASS: lemotdepassesecret!!-678
+      FTP_USER_HOME: /home/gur
     restart: always
 
 networks:

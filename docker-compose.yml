@@ -94,11 +94,27 @@ services:
     build:
       context: ./  # Replace with the path to your Flask app
       dockerfile: ./mos/Dockerfile
+    volumes:
+      - ftpdata:/home/ftpuser
     depends_on:
       - db
       - mosquitto
     networks:
       - app-network
+
+  ftp-server:
+    image: stilliard/pure-ftpd:latest
+    ports:
+      - "21:21"
+    volumes:
+      - ftpdata:/home/ftpuser
+    environment:
+      - FTP_USER=gur
+      - FTP_PASS=lemotdepassesecret!!-678
+      - FTP_HOME=/home/ftpuser
+      - FTP_UID=1000
+      - FTP_GID=1000
+    restart: always
 
 networks:
   app-network:
@@ -109,6 +125,7 @@ volumes:
   certbot-etc:
   certbot-var:
   web-volume:
+  ftpdata:
   dhparam:
     driver: local
     driver_opts:

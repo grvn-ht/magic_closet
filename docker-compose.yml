@@ -104,19 +104,15 @@ services:
 
   ftp:
     container_name: ftp
-    build:
-      context: ./ftp  # Replace with the path to your Flask app
+    image: delfer/alpine-ftp-server
     ports:
       - "21:21"
-      - "30000-30009:30000-30009"
-    volumes:
-      - ftpdata:/home/gur
-      - ftppass:/etc/pure-ftpd/passwd
+      - 21000-21010:21000-21010
     environment:
-      PUBLICHOST: localhost
-      FTP_USER_NAME: gur
-      FTP_USER_PASS: lemotdepassesecret!!-678
-      FTP_USER_HOME: /home/gur
+      - USERS="one|1234"
+      - ADDRESS=ftp.site.domain
+    volumes:
+      - ftpdata:/home/one
     restart: always
 
 networks:

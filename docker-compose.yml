@@ -110,7 +110,7 @@ services:
       - 21000-21010:21000-21010
     environment:
       - USERS="one|1234"
-      - ADDRESS=ftp.site.domain
+      - ADDRESS=terjack.space
     volumes:
       - ftpdata:/home/one
     restart: always

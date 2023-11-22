@@ -8,8 +8,7 @@ services:
     ports:
       - "5000:5000"  # Expose the Gunicorn port
     volumes:
-      - /home/debian/Closet-App/magic_closet/back_python/sample_image.jpg:/tmp/sample_image.jpg
-      - data:/tmp/
+      - data:/tmp/images
     environment:
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432

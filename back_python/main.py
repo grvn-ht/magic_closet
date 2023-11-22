@@ -186,7 +186,7 @@ def get_image_data():
 @app.route("/imagepost", methods=["POST"])
 def upload_image():
     image_path = '/tmp/images/sample_image.jpg'  # Destination path to save the image
-    with open(image_path, 'ab') as f:
+    with open(image_path, 'wb') as f:
         chunk = request.stream.read(1024)  # Read 1KB at a time
         while chunk:
             f.write(chunk)  # Write the chunk to the file

@@ -7,6 +7,8 @@ WORKDIR ${SRC_DIR}
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+RUN apk --no-cache add musl-dev linux-headers g++
+
 RUN pip install --upgrade pip
 
 RUN pip install pipenv

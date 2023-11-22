@@ -7,7 +7,7 @@ WORKDIR ${SRC_DIR}
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN apk --no-cache add musl-dev linux-headers g++
+RUN apk --no-cache add musl-dev linux-headers cmake make g++
 
 RUN pip install --upgrade pip
 

@@ -8,7 +8,8 @@ services:
     ports:
       - "5000:5000"  # Expose the Gunicorn port
     volumes:
-      - /home/debian/Closet-App/magic_closet/back_python/sample_image.jpg:/tmp/sample_image.jpg  # Mount the volume from the Flutter container to /var/www/html
+      - /home/debian/Closet-App/magic_closet/back_python/sample_image.jpg:/tmp/sample_image.jpg
+      - data:/tmp/
     environment:
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
@@ -94,8 +95,6 @@ services:
     build:
       context: ./  # Replace with the path to your Flask app
       dockerfile: ./mos/Dockerfile
-    volumes:
-      - ftpdata:/home/ftpuser
     depends_on:
       - db
       - mosquitto
@@ -111,6 +110,7 @@ volumes:
   certbot-etc:
   certbot-var:
   web-volume:
+  data:
   dhparam:
     driver: local
     driver_opts:

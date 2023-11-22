@@ -183,7 +183,7 @@ def get_image_data():
     #return jsonify(image_timestamps[0])
     return send_file('/tmp/images/sample_image.jpg')
 
-@app.route("/image", methods=["POST"])
+@app.route("/imagepost", methods=["POST"])
 def upload_image():
     image_path = '/tmp/images/sample_image.jpg'  # Destination path to save the image
     with open(image_path, 'ab') as f:

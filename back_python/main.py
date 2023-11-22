@@ -14,7 +14,7 @@ from PIL import Image
 import cv2
 import os
 from multiprocessing import Value
-import np
+import numpy as np
 
 app = Flask(__name__)
 

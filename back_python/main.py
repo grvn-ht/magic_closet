@@ -198,7 +198,7 @@ def upload():
 		nparr = np.fromstring(file.read(), np.uint8)
 		# decode image
 		img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-		cv2.imwrite('/tmp/images/sample_image.jpeg', img)
+		cv2.imwrite('/tmp/images/sample_image.jpg', img)
 		
 		return "[SUCCESS] Image Received", 201
 	else:

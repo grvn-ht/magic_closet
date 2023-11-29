@@ -1,13 +1,13 @@
+---
 modules:
-  - name: sample_json_metrics
-    port: 7979
-    path: /metrics
-
-    targets:
-      - name: sample_json
-        url: https://www.terjack.space/all_json
-        method: GET
-
-        labels:
-          environment: production
-          job: json_metrics
+  animals:
+    metrics:
+    - name: animal
+      type: object
+      help: Example of top-level lists in a separate module
+      path: '{*}'
+      labels:
+        name: '{ .Ec }'
+        predator: '{ .Ph }'
+      values:
+        population: '{ .Ec }'

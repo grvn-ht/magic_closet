@@ -100,6 +100,45 @@ services:
     networks:
       - app-network
 
+  json_exporter:
+    container_name: json_export
+    image: quay.io/prometheuscommunity/json-exporter
+    restart: always
+    container_name: json_exporter
+    volumes:
+      - ./prometheus-grafana/json-exporter/config.yml:/config.yml:ro
+    ports:
+      - 7979:7979
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    restart: always
+    volumes:
+      - ./prometheus-grafana/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:master 
+    restart: always
+    volumes:
+            - ./prometheus-grafana/grafana/grafana.ini:/etc/grafana/grafana.ini
+            - ./prometheus-grafana/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
+            - ./photo:/usr/share/grafana/public/img/
+            - mygraph:/var/lib/grafana
+    environment:
+      - GF_SERVER_DOMAIN=www.terjack.space
+      - GF_SERVER_ROOT_URL=http://151.80.152.245:42/graph
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    links:
+      - prometheus
+
 networks:
   app-network:
     driver: bridge
@@ -110,6 +149,7 @@ volumes:
   certbot-var:
   web-volume:
   data:
+  mygraph:
   dhparam:
     driver: local
     driver_opts:

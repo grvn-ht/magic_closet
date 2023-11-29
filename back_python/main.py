@@ -218,6 +218,7 @@ def get_all_data():
 
     #Info.query.with_entities(Info.temp, Info.created_at).all()
     #ec_timestamps = [{'ec': ec, 'timestamp': created_at.isoformat()} for ec, created_at in ec_data]
+    print(ec_data)
     json_dict = {
         "Time": ec_data.created_at.isoformat(),
         "Temperature": round(ec_data.temp, 2),

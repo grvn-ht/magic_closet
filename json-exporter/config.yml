@@ -19,7 +19,7 @@ metrics:
     help: hummmm
     path: '{}'
     values:
-      Time: '{.Humidite}'
+      Time: '{.Humidity}'
   - name: ec
     type: object
     help: ec

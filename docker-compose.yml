@@ -128,12 +128,10 @@ services:
     restart: always
     volumes:
             - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+            - ./grafana/grafana.key:/etc/grafana/grafana.key
+            - ./grafana/grafana.crt:/etc/grafana/grafana.crt
             - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
             - mygraph:/var/lib/grafana
-    environment:
-      - GF_SERVER_DOMAIN=www.terjack.space
-      - GF_SERVER_ROOT_URL=https://terjack.space:443/graf
-      - GF_SERVER_SERVE_FROM_SUB_PATH=true
     expose:
       - 3000
     ports:

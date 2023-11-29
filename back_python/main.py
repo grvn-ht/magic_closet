@@ -220,11 +220,11 @@ def get_all_data():
     #ec_timestamps = [{'ec': ec, 'timestamp': created_at.isoformat()} for ec, created_at in ec_data]
     print(ec_data)
     json_dict = {
-        "Time": ec_data.created_at.isoformat(),
-        "Temperature": round(ec_data.temp, 2),
-        "Humidity": round(ec_data.hum, 2),
-        "Ph": round(ec_data.ph, 2),
-        "Ec": round(ec_data.ec, 2)
+        "Time": 1,#ec_data.created_at.isoformat(),
+        "Temperature": 1,#round(ec_data.temp, 2),
+        "Humidity": 1,#round(ec_data.hum, 2),
+        "Ph": 1,#round(ec_data.ph, 2),
+        "Ec": 1,#round(ec_data.ec, 2)
     }
     return jsonify(json_dict)
 

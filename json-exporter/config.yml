@@ -1,34 +1,24 @@
 ---
 modules:
-  animals:
+  IOT:
     metrics:
     - name: time
-      type: object
+      type: value
       help: time
-      path: '{ }'
-      values:
-        time: '{ .Time }'
+      path: '{ $.Time }'
     - name: Temperature
-      type: object
+      type: value
       help: Temperature
-      path: '{ }'
-      values:
-        Temperature: '{ .Temperature }'
+      path: '{ $.Temperature }'
     - name: Humidity
-      type: object
+      type: value
       help: Humidity
-      path: '{ .Humidity }'
-      values:
-        Humidity: '{ .Humidity }'
+      path: '{ $.Humidity }'
     - name: Ec
-      type: object
+      type: value
       help: Ec
-      path: '{ }'
-      values:
-        Ec: '{ .Ec }'
+      path: '{ $.Ec }'
     - name: Ph
-      type: object
+      type: value
       help: Ph
-      path: '{ }'
-      values:
-        Ph: '{ .Ph }'
+      path: '{ $.Ph }'

@@ -1,29 +1,13 @@
-listenAddress: ":7979"
-metricsPath: "/metrics"
-logLevel: "info"
+modules:
+  - name: sample_json_metrics
+    port: 7979
+    path: /metrics
 
-scrapeConfigs:
-  - jobName: "json_endpoint"
-    json:
-      endpoint: "https://www.terjack.space/all_json"
-      requestType: "GET"
-      interval: "30s"
-      headers:
-        User-Agent: "json_exporter"
-    metrics:
-      - name: "Ec"
-        path: "$.Ec"
-        type: "gauge"
-        help: "EC value"
-      - name: "Humidity"
-        path: "$.Humidity"
-        type: "gauge"
-        help: "Humidity value"
-      - name: "Temperature"
-        path: "$.Temperature"
-        type: "gauge"
-        help: "Temperature value"
-      - name: "Ph"
-        path: "$.Ph"
-        type: "gauge"
-        help: "Ph value"
+    targets:
+      - name: sample_json
+        url: https://www.terjack.space/all_json
+        method: GET
+
+        labels:
+          environment: production
+          job: json_metrics

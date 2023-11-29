@@ -101,7 +101,6 @@ services:
       - app-network
 
   json_exporter:
-    container_name: json_export
     image: quay.io/prometheuscommunity/json-exporter
     restart: always
     container_name: json_exporter
@@ -126,7 +125,6 @@ services:
     volumes:
             - .grafana/grafana.ini:/etc/grafana/grafana.ini
             - .grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
-            - data:/usr/share/grafana/public/img/
             - mygraph:/var/lib/grafana
     environment:
       - GF_SERVER_DOMAIN=www.terjack.space

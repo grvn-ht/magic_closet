@@ -188,26 +188,24 @@ def get_image_data():
     return send_file('sample_image.jpg')
 
 @app.route("/imagepost", methods=["POST"])
-#@jwt_required()
 def upload():
-	received = request
-	img = None
-	if received.files:
-		print(received.files['imageFile'])
-		# convert string of image data to uint8
-		file  = received.files['imageFile']
-		nparr = np.fromstring(file.read(), np.uint8)
-		# decode image
-		img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-		cv2.imwrite('sample_image.jpg', img)
+    received = request
+    img = None
+    if received.files:
+        print(received.files['imageFile'])
+        file  = received.files['imageFile']
+        nparr = np.fromstring(file.read(), np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        cv2.imwrite('sample_image.jpg', img)
+        gif=[]
         frames = [Image.open('sample_image.jpg') for i in range(10)]
-        gif = []
-        for image in frames:
-            gif.append(image)
-        gif[0].save('gif.gif', save_all=True,optimize=False, append_images=gif[1:], loop=0)
+        for im in frames:
+            gif.append(im)
+        gif[0].save('gif.gif', save_all=True,optimize=False,append_images=gif[1:],loop=0)
         return "[SUCCESS] Image Received", 201
-	else:
-		return "[FAILED] Image Not Received", 204
+    else:
+        return "[FAILED] Image Not Received", 204
+
 
 @app.route("/gif", methods=["GET"])
 #@jwt_required()

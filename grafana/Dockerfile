@@ -1,5 +1,7 @@
 FROM grafana/grafana:master
 
+USER root
+
 COPY grafana.key /etc/grafana/grafana.key
 COPY grafana.crt /etc/grafana/grafana.crt
 

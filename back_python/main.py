@@ -185,7 +185,7 @@ def get_image_data():
     #image_data = Info.query.with_entities(Info.image, Info.created_at).order_by(Info.created_at.desc()).limit(1).all()
     #image_timestamps = [{'image': image, 'timestamp': created_at.isoformat()} for image, created_at in image_data]
     #return jsonify(image_timestamps[0])
-    return send_file('/tmp/images/sample_image.jpg')
+    return send_file('sample_image.jpg')
 
 @app.route("/imagepost", methods=["POST"])
 #@jwt_required()
@@ -199,12 +199,12 @@ def upload():
 		nparr = np.fromstring(file.read(), np.uint8)
 		# decode image
 		img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-		cv2.imwrite('/tmp/images/sample_image.jpg', img)
-        frames = [Image.open('/tmp/images/sample_image.jpg') for i in range(10)]
+		cv2.imwrite('sample_image.jpg', img)
+        frames = [Image.open('sample_image.jpg') for i in range(10)]
         gif = []
         for image in frames:
             gif.append(image)
-        gif[0].save('/tmp/gif.gif', save_all=True,optimize=False, append_images=gif[1:], loop=0)
+        gif[0].save('gif.gif', save_all=True,optimize=False, append_images=gif[1:], loop=0)
         return "[SUCCESS] Image Received", 201
 	else:
 		return "[FAILED] Image Not Received", 204
@@ -212,7 +212,7 @@ def upload():
 @app.route("/gif", methods=["GET"])
 #@jwt_required()
 def get_gif_data():
-    return send_file('/tmp/gif.gif')
+    return send_file('gif.gif')
 
 @app.route("/all_json", methods=["GET"])
 def get_all_data():

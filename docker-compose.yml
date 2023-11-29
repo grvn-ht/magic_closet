@@ -123,8 +123,8 @@ services:
     image: grafana/grafana:master 
     restart: always
     volumes:
-            - .grafana/grafana.ini:/etc/grafana/grafana.ini
-            - .grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
+            - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+            - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
             - mygraph:/var/lib/grafana
     environment:
       - GF_SERVER_DOMAIN=www.terjack.space

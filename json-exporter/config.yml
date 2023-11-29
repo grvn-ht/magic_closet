@@ -13,22 +13,22 @@ metrics:
     help: temperature
     path: '{}'
     values:
-      Time: '{.Temperature}'
+      Temperature: '{.Temperature}'
   - name: hum
     type: object
     help: hummmm
     path: '{}'
     values:
-      Time: '{.Humidity}'
+      Humidity: '{.Humidity}'
   - name: ec
     type: object
     help: ec
     path: '{}'
     values:
-      Time: '{.Ec}'
+      Ec: '{.Ec}'
   - name: ph
     type: object
     help: ph
     path: '{}'
     values:
-      Time: '{.Ph}'
+      Ph: '{.Ph}'

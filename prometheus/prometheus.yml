@@ -1,20 +1,36 @@
+scrape_configs:
+
+  ## gather metrics of prometheus itself
+- job_name: prometheus
+  static_configs:
+    - targets:
+      - prometheus:9090 # equivalent to "localhost:9090"
+
+  ## gather the metrics of json_exporter application itself
+- job_name: json_exporter
+  static_configs:
+    - targets:
+      ## Location of the json exporter's real <hostname>:<port>
+      - json_exporter:7979 # equivalent to "localhost:7979"
+
+  ## gather the metrics from third party json sources, via the json exporter
+- job_name: json
+  metrics_path: /probe
+  params:
+    module: [default]
+  static_configs:
+    - targets:
+      - flask-app:5000/all_json
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      ## Location of the json exporter's real <hostname>:<port>
+      replacement: json_exporter:7979 # equivalent to "localhost:7979"
+
+
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
-
-scrape_configs:
-  - job_name: json_exporter
-    scrape_interval: 20s
-    scrape_timeout: 10s
-    honor_labels: true
-    metrics_path: /probe
-    static_configs:
-      - targets:
-          - flask-app:5000/all_json
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - source_labels: [__param_target]
-        target_label: instance
-      - target_label: __address__
-        replacement: json_exporter:7979

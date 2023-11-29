@@ -1,34 +1,34 @@
-headers:
-  MyHeader: MyHeaderValue
-
-metrics:
-  - name: time
-    type: object
-    help: timeeee
-    path: '{}'
-    values:
-      Time: '{.Time}'
-  - name: temp
-    type: object
-    help: temperature
-    path: '{}'
-    values:
-      Temperature: '{.Temperature}'
-  - name: hum
-    type: object
-    help: hummmm
-    path: '{}'
-    values:
-      Humidity: '{.Humidity}'
-  - name: ec
-    type: object
-    help: ec
-    path: '{}'
-    values:
-      Ec: '{.Ec}'
-  - name: ph
-    type: object
-    help: ph
-    path: '{}'
-    values:
-      Ph: '{.Ph}'
+---
+modules:
+  animals:
+    metrics:
+    - name: time
+      type: object
+      help: time
+      path: '{ .Time }'
+      values:
+        time: '{ .Time }'
+    - name: Temperature
+      type: object
+      help: Temperature
+      path: '{ .Temperature }'
+      values:
+        Temperature: '{ .Temperature }'
+    - name: Humidity
+      type: object
+      help: Humidity
+      path: '{ .Humidity }'
+      values:
+        Humidity: '{ .Humidity }'
+    - name: Ec
+      type: object
+      help: Ec
+      path: '{ .Ec }'
+      values:
+        Ec: '{ .Ec }'
+    - name: Ph
+      type: object
+      help: Ph
+      path: '{ .Ph }'
+      values:
+        Ph: '{ .Ph }'

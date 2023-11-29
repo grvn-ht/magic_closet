@@ -29,8 +29,3 @@ scrape_configs:
     - target_label: __address__
       ## Location of the json exporter's real <hostname>:<port>
       replacement: json_exporter:7979 # equivalent to "localhost:7979"
-
-
-global:
-  scrape_interval: 15s
-  evaluation_interval: 15s

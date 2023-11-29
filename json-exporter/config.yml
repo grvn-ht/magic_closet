@@ -5,13 +5,13 @@ modules:
     - name: time
       type: object
       help: time
-      path: '{ .Time }'
+      path: '{ }'
       values:
         time: '{ .Time }'
     - name: Temperature
       type: object
       help: Temperature
-      path: '{ .Temperature }'
+      path: '{ }'
       values:
         Temperature: '{ .Temperature }'
     - name: Humidity
@@ -23,12 +23,12 @@ modules:
     - name: Ec
       type: object
       help: Ec
-      path: '{ .Ec }'
+      path: '{ }'
       values:
         Ec: '{ .Ec }'
     - name: Ph
       type: object
       help: Ph
-      path: '{ .Ph }'
+      path: '{ }'
       values:
         Ph: '{ .Ph }'

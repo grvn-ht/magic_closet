@@ -108,6 +108,8 @@ services:
       - ./json-exporter/config.yml:/config.yml:ro
     ports:
       - 7979:7979
+    networks:
+      - app-network
 
   prometheus:
     container_name: prometheus
@@ -117,6 +119,8 @@ services:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - 9090:9090
+    networks:
+      - app-network
 
   grafana:
     container_name: grafana
@@ -136,6 +140,8 @@ services:
       - 3000:3000
     links:
       - prometheus
+    networks:
+      - app-network
 
 networks:
   app-network:

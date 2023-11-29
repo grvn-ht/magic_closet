@@ -132,7 +132,7 @@ services:
             - mygraph:/var/lib/grafana
     environment:
       - GF_SERVER_DOMAIN=www.terjack.space
-      - GF_SERVER_ROOT_URL=https://151.80.152.245:42/graf
+      - GF_SERVER_ROOT_URL=https://terjack.space:443/graf
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
     expose:
       - 3000

@@ -200,14 +200,11 @@ def upload():
 		# decode image
 		img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 		cv2.imwrite('/tmp/images/sample_image.jpg', img)
-        try:
-            frames = [Image.open('/tmp/images/sample_image.jpg') for i in range(10)]
-            gif = []
-            for image in frames:
-                gif.append(image)
-            gif[0].save('/tmp/gif.gif', save_all=True,optimize=False, append_images=gif[1:], loop=0)
-        except Exception as e:
-            print(e)
+        frames = [Image.open('/tmp/images/sample_image.jpg') for i in range(10)]
+        gif = []
+        for image in frames:
+            gif.append(image)
+        gif[0].save('/tmp/gif.gif', save_all=True,optimize=False, append_images=gif[1:], loop=0)
         return "[SUCCESS] Image Received", 201
 	else:
 		return "[FAILED] Image Not Received", 204

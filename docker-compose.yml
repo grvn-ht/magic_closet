@@ -124,12 +124,11 @@ services:
 
   grafana:
     container_name: grafana
-    image: grafana/grafana:master
+    build:
+      context: ./grafana  # Replace with the path to your Flask app
     restart: always
     volumes:
             - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-            - ./grafana/grafana.key:/etc/grafana/grafana.key
-            - ./grafana/grafana.crt:/etc/grafana/grafana.crt
             - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
             - mygraph:/var/lib/grafana
     expose:

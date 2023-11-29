@@ -120,7 +120,7 @@ services:
 
   grafana:
     container_name: grafana
-    image: grafana/grafana:master 
+    image: grafana/grafana:master
     restart: always
     volumes:
             - ./grafana/grafana.ini:/etc/grafana/grafana.ini

@@ -106,7 +106,7 @@ services:
     restart: always
     container_name: json_exporter
     volumes:
-      - ./prometheus-grafana/json-exporter/config.yml:/config.yml:ro
+      - ./json-exporter/config.yml:/config.yml:ro
     ports:
       - 7979:7979
 
@@ -115,7 +115,7 @@ services:
     image: prom/prometheus:latest
     restart: always
     volumes:
-      - ./prometheus-grafana/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - 9090:9090
 
@@ -124,9 +124,9 @@ services:
     image: grafana/grafana:master 
     restart: always
     volumes:
-            - ./prometheus-grafana/grafana/grafana.ini:/etc/grafana/grafana.ini
-            - ./prometheus-grafana/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
-            - ./photo:/usr/share/grafana/public/img/
+            - .grafana/grafana.ini:/etc/grafana/grafana.ini
+            - .grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
+            - data:/usr/share/grafana/public/img/
             - mygraph:/var/lib/grafana
     environment:
       - GF_SERVER_DOMAIN=www.terjack.space

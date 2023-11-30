@@ -1,13 +1,13 @@
----
 modules:
-  animals:
+  default:
+    headers:
+      MyHeader: MyHeaderValue
     metrics:
-    - name: animal
-      type: object
-      help: Example of top-level lists in a separate module
-      path: '{ }'
-      labels:
-        name: '{ .Ec }'
-        predator: '{ .Ph }'
-      values:
-        population: '{ .Ec }'
+      - name: cryptocurrency
+        type: object
+        help: General statistics of the top cryptocurrencies
+        path: '{}'
+        labels:
+          id: '{.Time}'
+        values:
+          rank: '{.Ec}'

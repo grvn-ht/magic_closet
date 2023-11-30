@@ -7,7 +7,5 @@ modules:
         type: object
         help: General statistics of the top cryptocurrencies
         path: '{}'
-        labels:
-          id: '{.Time}'
         values:
-          rank: '{.Ec}'
+          Ec: '{.Ec}'

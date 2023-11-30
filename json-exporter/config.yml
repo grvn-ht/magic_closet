@@ -5,7 +5,7 @@ modules:
     - name: animal
       type: object
       help: Example of top-level lists in a separate module
-      path: '{*}'
+      path: '{ }'
       labels:
         name: '{ .Ec }'
         predator: '{ .Ph }'

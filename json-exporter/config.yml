@@ -3,12 +3,36 @@ modules:
     headers:
       MyHeader: MyHeaderValue
     metrics:
-      - name: cryptocurrency
+      - name: time
         type: object
-        help: General statistics of the top cryptocurrencies
+        help: timeeee
+        path: '{}'
+        values:
+          Time: '{.Time}'
+      - name: temp
+        type: object
+        help: temperature
+        path: '{}'
+        values:
+          Temp: '{.Temperature}'
+      - name: hum
+        type: object
+        help: hummmm
+        path: '{}'
+        values:
+          Hum: '{.Humidity}'
+      - name: ec
+        type: object
+        help: ec
         path: '{}'
         values:
           Ec: '{.Ec}'
+      - name: ph
+        type: object
+        help: ph
+        path: '{}'
+        values:
+          Ph: '{.Ph}'
 
 http_client_config:
   tls_config:

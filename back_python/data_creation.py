@@ -24,9 +24,9 @@ def create_sample_data(db, User, Closet, Info,app):
             #    image_data = image_file.read()
 
             event_date = start_date + (i * time_interval)
-            created_at = event_date
+            created_at = datetime.now() - timedelta(days=i+1)
 
-            info = Info(temp=temp, hum=hum, ph=ph, ec=ec, image='/home/debian/Closet-App/magic_closet/back_python/sample_image.jpg',
+            info = Info(temp=temp, hum=hum, ph=ph, ec=ec, image='/tmp/images/sample_image.jpg',
                         event_date=event_date.date(), created_at=created_at, closet_id=closet.id)
 
             db.session.add(info)

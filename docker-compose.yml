@@ -113,7 +113,7 @@ services:
 
   prometheus:
     container_name: prometheus
-    image: quay.io/prometheus/prometheus
+    image: bitnami/prometheus:2.48.0-debian-11-r0
     restart: always
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml

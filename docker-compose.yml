@@ -107,6 +107,7 @@ services:
     restart: always
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prom:/prometheus
     ports:
       - 9090:9090
     networks:
@@ -141,6 +142,7 @@ volumes:
   web-volume:
   data:
   mygraph:
+  prom:
   dhparam:
     driver: local
     driver_opts:

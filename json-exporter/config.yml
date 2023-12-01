@@ -9,3 +9,7 @@ modules:
         path: '{}'
         values:
           Ec: '{.Ec}'
+
+http_client_config:
+  tls_config:
+    insecure_skip_verify: true

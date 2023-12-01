@@ -1,4 +1,4 @@
-from flask import Flask,jsonify,request,Blueprint
+from flask import Flask,jsonify,request,Blueprint,make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import create_access_token, current_user, jwt_required, JWTManager, \
                                 get_jwt_identity, set_access_cookies, get_jwt, unset_jwt_cookies, \
@@ -212,22 +212,21 @@ def upload():
 def get_gif_data():
     return send_file('gif.gif')
 
-@app.route("/all_json", methods=["GET"])
-def get_all_data():
+
+def generateMetrics():
     ec_data = Info.query.order_by(Info.created_at.desc()).first()
-
-    #Info.query.with_entities(Info.temp, Info.created_at).all()
-    #ec_timestamps = [{'ec': ec, 'timestamp': created_at.isoformat()} for ec, created_at in ec_data]
     print(ec_data)
-    json_dict = {
-        "Time": ec_data.created_at.isoformat(),
-        "Temperature": round(ec_data.temp, 2),
-        "Humidity": round(ec_data.hum, 2),
-        "Ph": round(ec_data.ph, 2),
-        "Ec": round(ec_data.ec, 2)
-    }
-    return jsonify(json_dict)
+    ec = str(round(ec_data.ec, 2))
+    ph = str(round(ec_data.ph, 2))
+    temp = str(round(ec_data.temp, 2))
+    hum = str(round(ec_data.hum, 2))
+    return f'Temperature {temp} \nHumidity {hum} \nEc {ec} \nPh {ph}'
 
+@app.route("/metrics", methods=["GET"])
+def get_all_data():
+    response = make_response(generateMetrics(), 200)
+    response.mimetype = "text/plain"
+    return response
 
 if __name__ != '__main__':
     gunicorn_logger = logging.getLogger('gunicorn.error')

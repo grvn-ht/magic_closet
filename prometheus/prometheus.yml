@@ -1,14 +1,10 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
 scrape_configs:
-  - job_name: json_exporter
-    honor_labels: true
-    metrics_path: /probe
+  - job_name: IOT
+    scrape_interval: 10s
+    scrape_timeout: 5s
     static_configs:
       - targets:
-          - flask-app:5000/all_json
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - source_labels: [__param_target]
-        target_label: instance
-      - target_label: __address__
-        replacement: json_exporter:7979
+        - host.docker.internal:5000 # equivalent to "localhost:9090"

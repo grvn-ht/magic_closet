@@ -101,17 +101,6 @@ services:
     networks:
       - app-network
 
-  json_exporter:
-    image: quay.io/prometheuscommunity/json-exporter:v0.6.0
-    restart: always
-    container_name: json_exporter
-    volumes:
-      - ./json-exporter/config.yml:/config.yml:ro
-    ports:
-      - 7979:7979
-    networks:
-      - app-network
-
   prometheus:
     container_name: prometheus
     image: quay.io/prometheus/prometheus #bitnami/prometheus:2.48.0-debian-11-r0

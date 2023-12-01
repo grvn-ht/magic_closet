@@ -15,6 +15,7 @@ import cv2
 import os
 from multiprocessing import Value
 import numpy as np
+import datetime
 
 app = Flask(__name__)
 
@@ -185,7 +186,8 @@ def get_image_data():
     #image_data = Info.query.with_entities(Info.image, Info.created_at).order_by(Info.created_at.desc()).limit(1).all()
     #image_timestamps = [{'image': image, 'timestamp': created_at.isoformat()} for image, created_at in image_data]
     #return jsonify(image_timestamps[0])
-    return send_file('sample_image.jpg')
+    latest_info = Info.query.order_by(Info.created_at.desc()).first()
+    return send_file(latest_info.image)
 
 @app.route("/imagepost", methods=["POST"])
 def upload():
@@ -196,12 +198,33 @@ def upload():
         file  = received.files['imageFile']
         nparr = np.fromstring(file.read(), np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        cv2.imwrite('sample_image.jpg', img)
+
+        dat = datetime.datetime.now().strftime("%m.%d.%Y+%H:%M:%S")
+        photo_path = "/photo/"+dat+".jpg"
+        cv2.imwrite(photo_path, img)
+
+        # Récupérer la dernière ligne de la table
+        latest_info = Info.query.order_by(Info.created_at.desc()).first()
+        if latest_info:
+            # Mettre à jour la variable image de la dernière ligne
+            latest_info.image = photo_path
+            db.session.commit()
+
         gif=[]
-        frames = [Image.open('sample_image.jpg') for i in range(10)]
-        for im in frames:
+
+        three_months_ago = datetime.datetime.now() - datetime.timedelta(days=90)
+        images_last_3_months = Info.query.filter(Info.created_at >= three_months_ago).with_entities(Info.image).all()
+
+        frames = [Image.open(im) for im in images_last_3_months]
+        if len(frames) > 100:
+            step = len(frames) / 100  # Détermine le pas pour obtenir 100 images
+            sample_indices = [int(i * step) for i in range(100)]  # Indices pour l'échantillon
+            sample_images = [frames[i] for i in sample_indices]  # Crée l'échantillon
+        else:
+            sampled_images = frames
+        for im in sampled_images:
             gif.append(im)
-        gif[0].save('gif.gif', save_all=True,optimize=False,append_images=gif[1:],loop=0)
+        gif[0].save('me/gif.gif', save_all=True,optimize=False,append_images=gif[1:],loop=0)
         return "[SUCCESS] Image Received", 201
     else:
         return "[FAILED] Image Not Received", 204
@@ -210,7 +233,7 @@ def upload():
 @app.route("/gif", methods=["GET"])
 #@jwt_required()
 def get_gif_data():
-    return send_file('gif.gif')
+    return send_file('me/gif.gif')
 
 
 def generateMetrics():

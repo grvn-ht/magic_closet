@@ -4,6 +4,7 @@ from datetime import datetime
 import paho.mqtt.client as mqtt
 import time
 import threading
+import datetime
 
 infos_to_insert={}
 # with open('mos_sub/sample_image.jpg', 'rb') as image_file:
@@ -64,14 +65,16 @@ def insert_infos_to_db(info_to_insert):
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    start_date = datetime(2023, 9, 11)
+    start_date = datetime.datetime(2023, 9, 11)
     info_to_insert['event_date']=start_date
+    info_to_insert['created_at']=datetime.datetime.now()
+    info_to_insert['image']='/tmp/images/*'
+
     Info = Table('info', metadata, autoload=True, autoload_with=engine)
 
     insert_statement = Info.insert().values(**info_to_insert)
     session.execute(insert_statement)
     session.commit()
-
     session.close()
 
 # Your custom action to run every 5 minutes
@@ -83,11 +86,6 @@ def publish_infos_to_db():
             for id_closet, to_insert in infos_to_insert.items():
                 to_insert['closet_id']=id_closet
                 insert_infos_to_db(to_insert)
-            #reinitialisation du dict pour les 5 prochaines minutes
-
-            #save image on volume which we will share with flask app
-            #write in /data/id_closet/
-            #format image with: id_closet_timestamp.jpeg
 
             infos_to_insert={} 
             print('other bagg')

@@ -205,6 +205,7 @@ def upload():
 
         # Récupérer la dernière ligne de la table
         latest_info = Info.query.order_by(Info.created_at.desc()).first()
+        print(latest_info.image)
         if latest_info:
             # Mettre à jour la variable image de la dernière ligne
             latest_info.image = photo_path

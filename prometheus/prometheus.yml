@@ -7,4 +7,4 @@ scrape_configs:
     scrape_timeout: 5s
     static_configs:
       - targets:
-        - host.docker.internal:5000 # equivalent to "localhost:9090"
+        - flask-app:5000 # equivalent to "localhost:9090"

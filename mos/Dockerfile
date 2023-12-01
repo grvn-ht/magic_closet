@@ -1,6 +1,6 @@
 FROM python:3.10-alpine
 
-RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev linux-headers cmake make g++
 
 ENV SRC_DIR /usr/src/app
 

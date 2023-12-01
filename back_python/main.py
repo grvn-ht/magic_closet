@@ -200,7 +200,7 @@ def upload():
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
         dat = datetime.datetime.now().strftime("%m.%d.%Y+%H:%M:%S")
-        photo_path = "tmp/images/"+dat+".jpg"
+        photo_path = "/tmp/images/"+dat+".jpg"
         cv2.imwrite(photo_path, img)
 
         # Récupérer la dernière ligne de la table
@@ -224,7 +224,7 @@ def upload():
             sampled_images = frames
         for im in sampled_images:
             gif.append(im)
-        gif[0].save('tmp/gif.gif', save_all=True,optimize=False,append_images=gif[1:],loop=0)
+        gif[0].save('/tmp/gif.gif', save_all=True,optimize=False,append_images=gif[1:],loop=0)
         return "[SUCCESS] Image Received", 201
     else:
         return "[FAILED] Image Not Received", 204
@@ -233,7 +233,7 @@ def upload():
 @app.route("/gif", methods=["GET"])
 #@jwt_required()
 def get_gif_data():
-    return send_file('tmp/gif.gif')
+    return send_file('/tmp/gif.gif')
 
 
 def generateMetrics():

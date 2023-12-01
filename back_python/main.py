@@ -221,8 +221,8 @@ def upload():
             sample_indices = [int(i * step) for i in range(100)]  # Indices pour l'échantillon
             sample_images = [frames[i] for i in sample_indices]  # Crée l'échantillon
         else:
-            sampled_images = frames
-        for im in sampled_images:
+            sample_images = frames
+        for im in sample_images:
             gif.append(im)
         gif[0].save('/tmp/gif.gif', save_all=True,optimize=False,append_images=gif[1:],loop=0)
         return "[SUCCESS] Image Received", 201

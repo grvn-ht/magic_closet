@@ -215,7 +215,7 @@ def upload():
 
         three_months_ago = datetime.datetime.now() - datetime.timedelta(days=90)
         images_last_3_months = Info.query.filter(Info.created_at >= three_months_ago).with_entities(Info.image).all()
-
+        print(images_last_3_months)
         frames = [Image.open(im) for im in images_last_3_months]
         if len(frames) > 100:
             step = len(frames) / 100  # Détermine le pas pour obtenir 100 images

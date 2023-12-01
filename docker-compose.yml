@@ -60,6 +60,7 @@ services:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
       - dhparam:/etc/ssl/certs
+      - ./certs:/usr/local/nginx/conf/cert
     depends_on:
       - flutter-app
     networks:

@@ -217,6 +217,7 @@ def upload():
         images_last_3_months = Info.query.filter(Info.created_at >= three_months_ago).with_entities(Info.image).all()
         print(images_last_3_months)
         frames = [Image.open(im[0]) for im in images_last_3_months]
+        frames = list(filter(lambda a: a != '/tmp/images/*', frames))
         if len(frames) > 100:
             step = len(frames) / 100  # Détermine le pas pour obtenir 100 images
             print(step)
@@ -228,10 +229,11 @@ def upload():
             print('else')
             sample_images = frames
             print(sample_images)
-        for im in sample_images:
-            gif.append(im)
-        print(gif)
-        gif[0].save('/tmp/gif.gif', save_all=True,optimize=False,append_images=gif[1:],loop=0)
+        if sample_images != []:
+            for im in sample_images:
+                gif.append(im)
+            print(gif)
+            gif[0].save('/tmp/gif.gif', save_all=True,optimize=False,append_images=gif[1:],loop=0)
         return "[SUCCESS] Image Received", 201
     else:
         return "[FAILED] Image Not Received", 204

@@ -15,7 +15,8 @@ def create_sample_data(db, User, Closet, Info,app):
         start_date = datetime(2023, 8, 29)
         time_interval = timedelta(minutes=30)
 
-        for i in range(50):
+
+        for i in range(1):
             temp = -5 + (i * 1.1)
             hum = i * 2
             ph = i * 0.3
@@ -26,7 +27,7 @@ def create_sample_data(db, User, Closet, Info,app):
             event_date = start_date + (i * time_interval)
             created_at = datetime.now() - timedelta(days=i+1)
 
-            info = Info(temp=temp, hum=hum, ph=ph, ec=ec, image='/tmp/images/sample_image.jpg',
+            info = Info(temp=temp, hum=hum, ph=ph, ec=ec, image='/tmp/images/*',
                         event_date=event_date.date(), created_at=created_at, closet_id=closet.id)
 
             db.session.add(info)

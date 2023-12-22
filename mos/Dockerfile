@@ -19,9 +19,9 @@ RUN pipenv install --system --deploy
 
 RUN pipenv install psycopg2
 
-COPY ../back_python ./
+COPY mos ./
 
 # Add Pipenv virtual environment to PATH
 #ENV PATH="${SRC_DIR}/.venv/bin:$PATH"
 
-CMD ["python", "mos/mos_sub.py"]
+CMD ["python", "mos_sub.py"]

@@ -5,7 +5,7 @@ import paho.mqtt.client as mqtt
 import time
 import threading
 import datetime
-from back_python.model import Info
+from model import Info
 
 infos_to_insert={}
 # with open('mos_sub/sample_image.jpg', 'rb') as image_file:

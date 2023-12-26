@@ -35,11 +35,11 @@ def on_message(client, userdata, message):
         pass
     else:
         if id_closet not in infos_to_insert:
-            latest_info = Info.query.order_by(Info.created_at.desc()).first()
-            if latest_info != []:
-                infos_to_insert[id_closet] = {'ec':latest_info.ec,'ph':latest_info.ph,'hum':latest_info.hum,'temp':latest_info.temp, 'image':latest_info.image}
-            else:
-                infos_to_insert[id_closet] = {'ec':0,'ph':0,'hum':0,'temp':0,'image':'/tmp/images/*'}
+            #latest_info = Info.query.order_by(Info.created_at.desc()).first()
+            #if latest_info != []:
+            #    infos_to_insert[id_closet] = {'ec':latest_info.ec,'ph':latest_info.ph,'hum':latest_info.hum,'temp':latest_info.temp, 'image':latest_info.image}
+            #else:
+            infos_to_insert[id_closet] = {'ec':0,'ph':0,'hum':0,'temp':0,'image':'/tmp/images/*'}
         infos_to_insert[id_closet][message.topic]=value
         print(infos_to_insert[id_closet])
 

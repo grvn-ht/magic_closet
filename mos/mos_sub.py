@@ -72,7 +72,7 @@ def insert_infos_to_db(info_to_insert):
 
     Info = Table('info', metadata, autoload=True, autoload_with=engine)
 
-    latest_info = Info.query.order_by(Info.created_at.desc()).first()
+    latest_info = session.query(Info).order_by(Info.c.created_at.desc()).first()
 
     if latest_info != []:
         if info_to_insert['ec'] == 'ec':

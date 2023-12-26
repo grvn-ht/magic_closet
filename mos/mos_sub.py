@@ -92,9 +92,9 @@ def publish_infos_to_db():
                 to_insert['closet_id']=id_closet
                 insert_infos_to_db(to_insert)
 
+            print(infos_to_insert)
             infos_to_insert={} 
-            print('other bagg')
-            time.sleep(60)  # Sleep for 5 minutes (300 seconds)
+            time.sleep(20)  # Sleep for 5 minutes (300 seconds)
         except Exception as e:
             print(e)
             infos_to_insert={}

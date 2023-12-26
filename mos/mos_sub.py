@@ -116,7 +116,7 @@ def publish_infos_to_db():
 
             print(infos_to_insert)
             infos_to_insert={} 
-            time.sleep(20)  # Sleep for 5 minutes (300 seconds)
+            time.sleep(1920)  # Sleep for 5 minutes (300 seconds)
         except Exception as e:
             print(e)
             infos_to_insert={}

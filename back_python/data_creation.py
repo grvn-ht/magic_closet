@@ -17,10 +17,10 @@ def create_sample_data(db, User, Closet, Info,app):
 
 
         for i in range(1):
-            temp = -5 + (i * 1.1)
+            temp = i * 1.1
             hum = i * 2
             ph = i * 0.3
-            ec = 0.3 + (i * 0.03)
+            ec = i * 0.03
             #with open('sample_image.jpg', 'rb') as image_file:
             #    image_data = image_file.read()
 

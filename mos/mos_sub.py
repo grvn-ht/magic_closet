@@ -39,7 +39,7 @@ def on_message(client, userdata, message):
             #if latest_info != []:
             #    infos_to_insert[id_closet] = {'ec':latest_info.ec,'ph':latest_info.ph,'hum':latest_info.hum,'temp':latest_info.temp, 'image':latest_info.image}
             #else:
-            infos_to_insert[id_closet] = {'ec':0,'ph':0,'hum':0,'temp':0,'image':'/tmp/images/*'}
+            infos_to_insert[id_closet] = {'ec':'ec','ph':'ph','hum':'hum','temp':'temp','image':'/tmp/images/*'}
         infos_to_insert[id_closet][message.topic]=value
         print(infos_to_insert[id_closet])
 
@@ -70,12 +70,34 @@ def insert_infos_to_db(info_to_insert):
     Session = sessionmaker(bind=engine)
     session = Session()
 
+    Info = Table('info', metadata, autoload=True, autoload_with=engine)
+
+    latest_info = Info.query.order_by(Info.created_at.desc()).first()
+
+    if latest_info != []:
+        if info_to_insert['ec'] == 'ec':
+            info_to_insert['ec'] = latest_info.ec
+        if info_to_insert['ph'] == 'ph':
+            info_to_insert['ph'] = latest_info.ph
+        if info_to_insert['hum'] == 'hum':
+            info_to_insert['hum'] = latest_info.hum
+        if info_to_insert['temp'] == 'temp':
+            info_to_insert['temp'] = latest_info.temp
+        if info_to_insert['image'] == '/tmp/images/*':
+            info_to_insert['image'] = latest_info.image
+    else:
+        if info_to_insert['ec'] == 'ec':
+            info_to_insert['ec'] = 0
+        if info_to_insert['ph'] == 'ph':
+            info_to_insert['ph'] = 0
+        if info_to_insert['hum'] == 'hum':
+            info_to_insert['hum'] = 0
+        if info_to_insert['temp'] == 'temp':
+            info_to_insert['temp'] = 0
+
     start_date = datetime.datetime(2023, 9, 11)
     info_to_insert['event_date']=start_date
     info_to_insert['created_at']=datetime.datetime.now()
-    info_to_insert['image']='/tmp/images/*'
-
-    Info = Table('info', metadata, autoload=True, autoload_with=engine)
 
     insert_statement = Info.insert().values(**info_to_insert)
     session.execute(insert_statement)

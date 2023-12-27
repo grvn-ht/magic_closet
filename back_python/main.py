@@ -189,6 +189,11 @@ def get_image_data():
     latest_info = Info.query.order_by(Info.created_at.desc()).first()
     return send_file(latest_info.image)
 
+def is_black_dominant(image):
+    img_array = np.array(image)
+    avg_rgb = np.mean(img_array, axis=(0, 1))
+    return np.all(avg_rgb < 50)
+
 @app.route("/imagepost", methods=["POST"])
 def upload():
     received = request
@@ -218,6 +223,9 @@ def upload():
         print(images_last_3_months)
         frames = [Image.open(im[0]) for im in images_last_3_months]
         frames = list(filter(lambda a: a != '/tmp/images/*', frames))
+        # Charger les images et filtrer celles à dominance noire
+        frames = [im for im in frames if not is_black_dominant(im)]
+
         if len(frames) > 100:
             step = len(frames) / 100  # Détermine le pas pour obtenir 100 images
             print(step)

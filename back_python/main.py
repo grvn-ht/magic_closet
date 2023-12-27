@@ -31,7 +31,7 @@ CORS(app, origins="*", supports_credentials=True)#origins="*", supports_credenti
 
 jwt = JWTManager(app)
 db = setup_db(app)
-db_drop_and_create_all(app)
+#db_drop_and_create_all(app)
 
 views = Blueprint('views', __name__)
 
@@ -277,4 +277,3 @@ if __name__ != '__main__':
 if __name__ == "__main__":
     create_sample_data(db, User, Closet, Info,app)
     app.run(debug=True)
-    

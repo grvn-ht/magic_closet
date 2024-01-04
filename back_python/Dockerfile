@@ -24,4 +24,4 @@ COPY back_python ./
 
 EXPOSE 5000
 #["pipenv", "run", "gunicorn", "main:app", "--bind", "0.0.0.0:8000"]
-CMD ["gunicorn", "--graceful-timeout", "60","main:app", "-b", "0.0.0.0:5000","--log-level","warning","-t","60"]
+CMD ["gunicorn", "--graceful-timeout", "60","main:app", "-b", "0.0.0.0:5000","--log-level","warning","-t","120"]

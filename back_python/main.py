@@ -255,7 +255,7 @@ def get_gif_data():
 
 def generateMetrics():
     ec_data = Info.query.order_by(Info.created_at.desc()).first()
-    print(ec_data)
+    #print(ec_data)
     ec = str(round(ec_data.ec, 2))
     ph = str(round(ec_data.ph, 2))
     temp = str(round(ec_data.temp, 2))

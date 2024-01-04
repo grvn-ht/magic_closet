@@ -228,19 +228,19 @@ def upload():
 
         if len(frames) > 100:
             step = len(frames) / 100  # Détermine le pas pour obtenir 100 images
-            print(step)
+            #print(step)
             sample_indices = [int(i * step) for i in range(100)]  # Indices pour l'échantillon
-            print(sample_indices)
+            #print(sample_indices)
             sample_images = [frames[i] for i in sample_indices]  # Crée l'échantillon
-            print(sample_images)
+            #print(sample_images)
         else:
             print('else')
             sample_images = frames
-            print(sample_images)
+            #print(sample_images)
         if sample_images != []:
             for im in sample_images:
                 gif.append(im)
-            print(gif)
+            #print(gif)
             gif[0].save('/tmp/gif.gif', save_all=True,optimize=False,append_images=gif[1:],loop=0)
         return "[SUCCESS] Image Received", 201
     else:
@@ -276,4 +276,4 @@ if __name__ != '__main__':
 
 if __name__ == "__main__":
     #create_sample_data(db, User, Closet, Info,app)
-    app.run(debug=True)
+    app.run(debug=True, timeout=200)

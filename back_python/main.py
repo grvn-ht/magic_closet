@@ -240,7 +240,7 @@ def upload():
         if sample_images != []:
             for im in sample_images:
                 gif.append(im)
-            #print(gif)
+            print(datetime.datetime.now())
             gif[0].save('/tmp/gif.gif', save_all=True,optimize=False,append_images=gif[1:],loop=0)
         return "[SUCCESS] Image Received", 201
     else:
@@ -269,11 +269,13 @@ def get_all_data():
     return response
 
 if __name__ != '__main__':
+    print("diff de main")
     gunicorn_logger = logging.getLogger('gunicorn.error')
     app.logger.handlers = gunicorn_logger.handlers
     app.logger.setLevel(gunicorn_logger.level)
     #create_sample_data(db, User, Closet, Info,app)
 
 if __name__ == "__main__":
+    print("main")
     #create_sample_data(db, User, Closet, Info,app)
     app.run(debug=True, timeout=200)

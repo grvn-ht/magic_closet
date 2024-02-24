@@ -261,9 +261,12 @@ def generateMetrics():
     ph = str(round(ec_data.ph, 2))
     temp = str(round(ec_data.temp, 2))
     hum = str(round(ec_data.hum, 2))
-
-    temp_clem = str(round(temp_hum_clem.temp, 2))
-    hum_clem = str(round(temp_hum_clem.hum, 2))
+    if temp_hum_clem is None:
+        temp_clem="0"
+        hum_clem="0"
+    else:
+        temp_clem = str(round(temp_hum_clem.temp, 2))
+        hum_clem = str(round(temp_hum_clem.hum, 2))
     return f'Temperature {temp} \nHumidity {hum} \nEc {ec} \nPh {ph}\nTempClem {temp_clem} \nHumClem {hum_clem}'
 
 @app.route("/metrics", methods=["GET"])

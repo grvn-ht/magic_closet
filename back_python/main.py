@@ -254,13 +254,17 @@ def get_gif_data():
 
 
 def generateMetrics():
-    ec_data = Info.query.order_by(Info.created_at.desc()).first()
+    ec_data = Info.query.filter(Info.closet_id == 1).order_by(Info.created_at.desc()).first()
+    temp_hum_clem = Info.query.filter(Info.closet_id == 2).order_by(Info.created_at.desc()).first()
     #print(ec_data)
     ec = str(round(ec_data.ec, 2))
     ph = str(round(ec_data.ph, 2))
     temp = str(round(ec_data.temp, 2))
     hum = str(round(ec_data.hum, 2))
-    return f'Temperature {temp} \nHumidity {hum} \nEc {ec} \nPh {ph}'
+
+    temp_clem = str(round(temp_hum_clem.temp, 2))
+    hum_clem = str(round(temp_hum_clem.hum, 2))
+    return f'Temperature {temp} \nHumidity {hum} \nEc {ec} \nPh {ph}\nTempClem {temp_clem} \nHumClem {hum_clem}'
 
 @app.route("/metrics", methods=["GET"])
 def get_all_data():

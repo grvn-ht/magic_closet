@@ -31,7 +31,7 @@ def on_message(client, userdata, message):
     global infos_to_insert
     
     id_closet, value = decode_message(message.payload.decode("utf-8"))
-    
+
     if id_closet is None:
         pass
     else:
@@ -117,7 +117,7 @@ def publish_infos_to_db():
 
             print(infos_to_insert)
             infos_to_insert={} 
-            time.sleep(1920)  # Sleep for 5 minutes (300 seconds)
+            time.sleep(20)#(1920)  # Sleep for 5 minutes (300 seconds)
         except Exception as e:
             print(e)
             infos_to_insert={}

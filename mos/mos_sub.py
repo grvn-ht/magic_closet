@@ -122,10 +122,11 @@ def publish_infos_to_db():
             print(e)
             infos_to_insert={}
             time.sleep(60)  # Sleep for 5 minutes (300 seconds)
+print("in print")
 # Start the MQTT loop in a separate thread
 mqtt_thread = threading.Thread(target=mqtt_loop)
 mqtt_thread.start()
-
+print("after first thread")
 # Start the custom action timer in a separate thread
 custom_action_thread = threading.Thread(target=publish_infos_to_db)
 custom_action_thread.start()

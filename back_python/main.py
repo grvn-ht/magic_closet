@@ -252,6 +252,13 @@ def upload():
 def get_gif_data():
     return send_file('/tmp/gif.gif')
 
+@app.route("/testt", methods=["GET"])
+#@jwt_required()
+def get_ecc_data():
+    ec_data = Info.query.with_entities(Info.ec, Info.created_at).order_by(Info.created_at.desc()).limit(500).all()
+    #Info.query.with_entities(Info.temp, Info.created_at).all()
+    ec_timestamps = [{'ecc': ec, 'timestamp': created_at.isoformat()} for ec, created_at in ec_data]
+    return jsonify(ec_timestamps)
 
 def generateMetrics():
     ec_data = Info.query.filter(Info.closet_id == 1).order_by(Info.created_at.desc()).first()
@@ -280,13 +287,6 @@ def get_all_data():
     response.mimetype = "text/plain"
     return response
 
-@app.route("/testt", methods=["GET"])
-#@jwt_required()
-def get_ecc_data():
-    ec_data = Info.query.with_entities(Info.ec, Info.created_at).order_by(Info.created_at.desc()).limit(500).all()
-    #Info.query.with_entities(Info.temp, Info.created_at).all()
-    ec_timestamps = [{'ecc': ec, 'timestamp': created_at.isoformat()} for ec, created_at in ec_data]
-    return jsonify(ec_timestamps)
 
 if __name__ != '__main__':
     print("diff de main")

@@ -282,7 +282,7 @@ def get_all_data():
 
 @app.route("/testt", methods=["GET"])
 #@jwt_required()
-def get_ec_data():
+def get_ecc_data():
     ec_data = Info.query.with_entities(Info.ec, Info.created_at).order_by(Info.created_at.desc()).limit(500).all()
     #Info.query.with_entities(Info.temp, Info.created_at).all()
     ec_timestamps = [{'ecc': ec, 'timestamp': created_at.isoformat()} for ec, created_at in ec_data]

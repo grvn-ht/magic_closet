@@ -167,9 +167,9 @@ def get_moisture_data():
 @app.route("/moisturee", methods=["GET"])
 #@jwt_required()
 def get_moisturee_data():
-    moisture_data = Info.query.with_entities(Info.hum, Info.created_at).order_by(Info.created_at.desc()).limit(500).all()
+    moisture_data = Info.query.with_entities(Info.hum, Info.created_at, Info.closet_id).order_by(Info.created_at.desc()).limit(500).all()
     #Info.query.with_entities(Info.temp, Info.created_at).all()
-    moisture_timestamps = [{'moisture': hum, 'timestamp': created_at.isoformat()} for hum, created_at in moisture_data]
+    moisture_timestamps = [{'moisture': hum, 'timestamp': created_at.isoformat(), "id":closet_id} for hum, created_at, closet_id in moisture_data]
     return jsonify(moisture_timestamps)
 
 @app.route("/ph", methods=["GET"])

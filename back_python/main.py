@@ -280,6 +280,15 @@ def get_all_data():
     response.mimetype = "text/plain"
     return response
 
+@app.route("/test", methods=["GET"])
+#@jwt_required()
+def get_test_data():
+    ec_data = Info.query.with_entities(Info.hum, Info.created_at).filter(Info.closet_id == 2).order_by(Info.created_at.desc()).all()
+    #Info.query.with_entities(Info.ec, Info.created_at).order_by(Info.created_at.desc()).limit(500).all()
+    #Info.query.with_entities(Info.temp, Info.created_at).all()
+    ec_timestamps = [{'ec': hum, 'timestamp': created_at.isoformat()} for hum, created_at in ec_data]
+    return jsonify(ec_timestamps)
+
 if __name__ != '__main__':
     print("diff de main")
     gunicorn_logger = logging.getLogger('gunicorn.error')

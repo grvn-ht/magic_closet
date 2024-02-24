@@ -31,6 +31,7 @@ def on_message(client, userdata, message):
     global infos_to_insert
     
     id_closet, value = decode_message(message.payload.decode("utf-8"))
+    
     if id_closet is None:
         pass
     else:

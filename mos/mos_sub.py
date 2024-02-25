@@ -73,7 +73,7 @@ def insert_infos_to_db(info_to_insert):
 
     Info = Table('info', metadata, autoload=True, autoload_with=engine)
 
-    latest_info = session.query(Info).order_by(Info.c.created_at.desc()).first()
+    latest_info = session.query(Info).filter(Info.closet_id == info_to_insert['closet_id']).order_by(Info.c.created_at.desc()).first()
 
     if latest_info != []:
         if info_to_insert['ec'] == 'ec':
@@ -117,7 +117,7 @@ def publish_infos_to_db():
 
             print(infos_to_insert)
             infos_to_insert={} 
-            time.sleep(20)#(1920)  # Sleep for 5 minutes (300 seconds)
+            time.sleep(1920)#(1920)  # Sleep for 5 minutes (300 seconds)
         except Exception as e:
             print(e)
             infos_to_insert={}

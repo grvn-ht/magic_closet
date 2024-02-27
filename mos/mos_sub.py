@@ -71,9 +71,10 @@ def insert_infos_to_db(to_insert, id_closet):
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    Info = Table('info', metadata, autoload=True, autoload_with=engine)
+    #Info = Table('info', metadata, autoload=True, autoload_with=engine)
 
-    latest_info = session.query(Info).filter(Info.closet_id == id_closet).order_by(Info.c.created_at.desc()).first()
+    #latest_info = session.query(Info).filter(Info.closet_id == id_closet).order_by(Info.c.created_at.desc()).first()
+    latest_info = Info.query.filter(Info.closet_id == id_closet).order_by(Info.created_at.desc()).first()
 
     if latest_info != []:
         if to_insert['ec'] == 'ec':

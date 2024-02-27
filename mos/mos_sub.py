@@ -62,7 +62,7 @@ for topic in topics:
 def mqtt_loop():
     client.loop_forever()
 
-def insert_infos_to_db(info_to_insert):
+def insert_infos_to_db(to_insert, id_closet):
     # Database connection parameters
     db_url = "postgresql://gur:lemotdepassesecret!!-678@151.80.152.245:5432/fullcloset"
     engine = create_engine(db_url)
@@ -73,34 +73,34 @@ def insert_infos_to_db(info_to_insert):
 
     Info = Table('info', metadata, autoload=True, autoload_with=engine)
 
-    latest_info = session.query(Info).filter(Info.closet_id == info_to_insert['closet_id']).order_by(Info.c.created_at.desc()).first()
+    latest_info = session.query(Info).filter(Info.closet_id == id_closet).order_by(Info.c.created_at.desc()).first()
 
     if latest_info != []:
-        if info_to_insert['ec'] == 'ec':
-            info_to_insert['ec'] = latest_info.ec
-        if info_to_insert['ph'] == 'ph':
-            info_to_insert['ph'] = latest_info.ph
-        if info_to_insert['hum'] == 'hum':
-            info_to_insert['hum'] = latest_info.hum
-        if info_to_insert['temp'] == 'temp':
-            info_to_insert['temp'] = latest_info.temp
-        if info_to_insert['image'] == '/tmp/images/*':
-            info_to_insert['image'] = latest_info.image
+        if to_insert['ec'] == 'ec':
+            to_insert['ec'] = latest_info.ec
+        if to_insert['ph'] == 'ph':
+            to_insert['ph'] = latest_info.ph
+        if to_insert['hum'] == 'hum':
+            to_insert['hum'] = latest_info.hum
+        if to_insert['temp'] == 'temp':
+            to_insert['temp'] = latest_info.temp
+        if to_insert['image'] == '/tmp/images/*':
+            to_insert['image'] = latest_info.image
     else:
-        if info_to_insert['ec'] == 'ec':
-            info_to_insert['ec'] = 0
-        if info_to_insert['ph'] == 'ph':
-            info_to_insert['ph'] = 0
-        if info_to_insert['hum'] == 'hum':
-            info_to_insert['hum'] = 0
-        if info_to_insert['temp'] == 'temp':
-            info_to_insert['temp'] = 0
+        if to_insert['ec'] == 'ec':
+            to_insert['ec'] = 0
+        if to_insert['ph'] == 'ph':
+            to_insert['ph'] = 0
+        if to_insert['hum'] == 'hum':
+            to_insert['hum'] = 0
+        if to_insert['temp'] == 'temp':
+            to_insert['temp'] = 0
 
     start_date = datetime.datetime(2023, 9, 11)
-    info_to_insert['event_date']=start_date
-    info_to_insert['created_at']=datetime.datetime.now()
+    to_insert['event_date']=start_date
+    to_insert['created_at']=datetime.datetime.now()
 
-    insert_statement = Info.insert().values(**info_to_insert)
+    insert_statement = Info.insert().values(**to_insert)
     session.execute(insert_statement)
     session.commit()
     session.close()
@@ -112,8 +112,8 @@ def publish_infos_to_db():
         # Access the global received_messages dictionary to retrieve MQTT messages
         try:
             for id_closet, to_insert in infos_to_insert.items():
-                to_insert['closet_id']=id_closet
-                insert_infos_to_db(to_insert)
+                #to_insert['closet_id']=id_closet
+                insert_infos_to_db(to_insert,id_closet)
 
             print(infos_to_insert)
             infos_to_insert={} 

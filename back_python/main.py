@@ -194,7 +194,7 @@ def get_image_data():
     #image_data = Info.query.with_entities(Info.image, Info.created_at).order_by(Info.created_at.desc()).limit(1).all()
     #image_timestamps = [{'image': image, 'timestamp': created_at.isoformat()} for image, created_at in image_data]
     #return jsonify(image_timestamps[0])
-    latest_info = Info.query.order_by(Info.created_at.desc()).first()
+    latest_info = Info.query.filter(Info.closet_id == 1).order_by(Info.created_at.desc()).first()
     return send_file(latest_info.image)
 
 def is_black_dominant(image):
@@ -217,7 +217,7 @@ def upload():
         cv2.imwrite(photo_path, img)
 
         # Récupérer la dernière ligne de la table
-        latest_info = Info.query.order_by(Info.created_at.desc()).first()
+        latest_info = Info.query.filter(Info.closet_id == 1).order_by(Info.created_at.desc()).first()
         print(latest_info.image)
         if latest_info:
             # Mettre à jour la variable image de la dernière ligne
@@ -258,7 +258,10 @@ def upload():
 @app.route("/gif", methods=["GET"])
 #@jwt_required()
 def get_gif_data():
-    return send_file('/tmp/gif.gif')
+    if os.path.exists('/tmp/gif.gif'):
+        return send_file('/tmp/gif.gif')
+    else:
+        return "no file"
 
 def generateMetrics():
     ec_data = Info.query.filter(Info.closet_id == 1).order_by(Info.created_at.desc()).first()

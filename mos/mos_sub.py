@@ -113,7 +113,7 @@ def publish_infos_to_db():
         # Access the global received_messages dictionary to retrieve MQTT messages
         try:
             for id_closet, to_insert in infos_to_insert.items():
-                #to_insert['closet_id']=id_closet
+                to_insert['closet_id']=id_closet
                 insert_infos_to_db(to_insert,id_closet)
 
             print(infos_to_insert)

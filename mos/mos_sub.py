@@ -29,20 +29,22 @@ def decode_message(message):
 # Callback when a message is received
 def on_message(client, userdata, message):
     global infos_to_insert
-    
-    id_closet, value = decode_message(message.payload.decode("utf-8"))
+    try:
+        id_closet, value = decode_message(message.payload.decode("utf-8"))
 
-    if id_closet is None:
+        if id_closet is None:
+            pass
+        else:
+            if id_closet not in infos_to_insert:
+                #latest_info = Info.query.order_by(Info.created_at.desc()).first()
+                #if latest_info != []:
+                #    infos_to_insert[id_closet] = {'ec':latest_info.ec,'ph':latest_info.ph,'hum':latest_info.hum,'temp':latest_info.temp, 'image':latest_info.image}
+                #else:
+                infos_to_insert[id_closet] = {'ec':'ec','ph':'ph','hum':'hum','temp':'temp','image':'/tmp/images/*'}
+            infos_to_insert[id_closet][message.topic]=value
+            print(infos_to_insert[id_closet])
+    except:
         pass
-    else:
-        if id_closet not in infos_to_insert:
-            #latest_info = Info.query.order_by(Info.created_at.desc()).first()
-            #if latest_info != []:
-            #    infos_to_insert[id_closet] = {'ec':latest_info.ec,'ph':latest_info.ph,'hum':latest_info.hum,'temp':latest_info.temp, 'image':latest_info.image}
-            #else:
-            infos_to_insert[id_closet] = {'ec':'ec','ph':'ph','hum':'hum','temp':'temp','image':'/tmp/images/*'}
-        infos_to_insert[id_closet][message.topic]=value
-        print(infos_to_insert[id_closet])
 
 # Create an MQTT client
 client = mqtt.Client()
